@@ -17,18 +17,17 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('short_description');
             $table->text('description');
-            $table->decimal('regular_price');
-            $table->decimal('sale_price')->nullable();
+            $table->decimal('regular_price', 10, 2);
+            $table->decimal('discount', 5, 2)->nullable();
             $table->string('SKU');
-            $table->enum('stock_status',['instock,outofstock']);
+            $table->enum('stock_status', ['instock', 'outofstock']);
             $table->boolean('featarured')->default(false);
             $table->unsignedInteger('quantity')->default(1);
             $table->string('image');
             $table->text('images');
-            $table ->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('category_id');
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-          
         });
     }
 

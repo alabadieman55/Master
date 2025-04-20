@@ -1,6 +1,6 @@
 @extends('layouts.base')
 @section('content')
-<section class="pt-0 poster-section">
+    <section class="pt-0 poster-section">
         <div class="poster-image slider-for custome-arrow classic-arrow">
             <div>
                 <img src="assets/images/furniture-images/poster/1.png" class="img-fluid blur-up lazyload" alt="">
@@ -15,7 +15,8 @@
         <div class="slider-nav image-show">
             <div>
                 <div class="poster-img">
-                    <img src="assets/images/furniture-images/poster/t2.jpg" class="img-fluid blur-up lazyload" alt="">
+                    <img src="assets/images/furniture-images/poster/t2.jpg" class="img-fluid blur-up lazyload"
+                        alt="">
                     <div class="overlay-color">
                         <i class="fas fa-plus theme-color"></i>
                     </div>
@@ -23,7 +24,8 @@
             </div>
             <div>
                 <div class="poster-img">
-                    <img src="assets/images/furniture-images/poster/t1.jpg" class="img-fluid blur-up lazyload" alt="">
+                    <img src="assets/images/furniture-images/poster/t1.jpg" class="img-fluid blur-up lazyload"
+                        alt="">
                     <div class="overlay-color">
                         <i class="fas fa-plus theme-color"></i>
                     </div>
@@ -32,7 +34,8 @@
             </div>
             <div>
                 <div class="poster-img">
-                    <img src="assets/images/furniture-images/poster/t3.jpg" class="img-fluid blur-up lazyload" alt="">
+                    <img src="assets/images/furniture-images/poster/t3.jpg" class="img-fluid blur-up lazyload"
+                        alt="">
                     <div class="overlay-color">
                         <i class="fas fa-plus theme-color"></i>
                     </div>
@@ -61,7 +64,9 @@
             </div>
 
             <div class="social-image">
-                <h6>Twitter</h6>
+                <a href="#">
+                    <h6>Twitter</h6>
+                </a>
             </div>
         </div>
     </section>
@@ -374,8 +379,8 @@
                     <div class="product-box">
                         <div class="img-wrapper">
                             <a href="product/details.html">
-                                <img src="assets/images/fashion/product/front/3.jpg"
-                                    class="w-100 bg-img blur-up lazyload" alt="">
+                                <img src="assets/images/fashion/product/front/3.jpg" class="w-100 bg-img blur-up lazyload"
+                                    alt="">
                             </a>
                             <div class="circle-shape"></div>
                             <span class="background-text">Furniture</span>
@@ -439,8 +444,8 @@
                     <div class="product-box">
                         <div class="img-wrapper">
                             <a href="product/details.html">
-                                <img src="assets/images/fashion/product/front/2.jpg"
-                                    class="w-100 bg-img blur-up lazyload" alt="">
+                                <img src="assets/images/fashion/product/front/2.jpg" class="w-100 bg-img blur-up lazyload"
+                                    alt="">
                             </a>
                             <div class="circle-shape"></div>
                             <span class="background-text">Furniture</span>
@@ -569,8 +574,8 @@
                     <div class="product-box">
                         <div class="img-wrapper">
                             <a href="product/details.html">
-                                <img src="assets/images/fashion/product/front/3.jpg"
-                                    class="w-100 bg-img blur-up lazyload" alt="">
+                                <img src="assets/images/fashion/product/front/3.jpg" class="w-100 bg-img blur-up lazyload"
+                                    alt="">
                             </a>
                             <div class="circle-shape"></div>
                             <span class="background-text">Furniture</span>
@@ -634,8 +639,8 @@
                     <div class="product-box">
                         <div class="img-wrapper">
                             <a href="product/details.html">
-                                <img src="assets/images/fashion/product/front/8.jpg"
-                                    class="w-100 bg-img blur-up lazyload" alt="">
+                                <img src="assets/images/fashion/product/front/8.jpg" class="w-100 bg-img blur-up lazyload"
+                                    alt="">
                             </a>
                             <div class="circle-shape"></div>
                             <span class="background-text">Furniture</span>
@@ -981,16 +986,20 @@
                 </div>
                 <div class="col-xxl-10 col-lg-9">
                     <div class="category-wrapper category-slider1 white-arrow category-arrow">
-                        <div>
-                            <a href="shop-left-sidebar.html" class="category-wrap category-padding">
-                                <img src="assets/images/fashion/category/1.jpg" class="bg-img blur-up lazyload"
-                                    alt="category image">
-                                <div class="category-content category-text-1">
-                                    <h3 class="theme-color">Shoes</h3>
-                                    <span class="text-dark">Fashion</span>
-                                </div>
-                            </a>
-                        </div>
+                        @foreach ($categories as $category)
+                            <div>
+                                <a href="shop-left-sidebar.html" class="category-wrap category-padding">
+                                    <img src="{{ asset('storage/' . $category->image) }}" class="bg-img blur-up lazyload"
+                                        alt="category image">
+                                    <div class="category-content category-text-1">
+                                        <h3 class="theme-color">{{ $category->name }}</h3>
+                                        <span class="text-dark">{{ $category->slug }}</span>
+                                    </div>
+                                </a>
+                            </div>
+                        @endforeach
+
+
                         <div>
                             <a href="shop-left-sidebar.html" class="category-wrap category-padding">
                                 <img src="assets/images/fashion/category/2.jpg" class="bg-img blur-up lazyload"
@@ -1631,16 +1640,21 @@
 
                 <div class="our-product products-c">
                     <div>
+
+                        @foreach ($productsDiscount as $discount)
+                        @endforeach
                         <div class="product-box">
                             <div class="img-wrapper">
                                 <a href="product/details.html">
-                                    <img src="assets/images/fashion/product/front/25.jpg"
+                                    <img src="{{ asset('storage/products/' . $discount->image) }}"
                                         class="w-100 bg-img blur-up lazyload" alt="">
                                 </a>
                                 <div class="circle-shape"></div>
                                 <span class="background-text">Fashion</span>
                                 <div class="label-block">
-                                    <span class="label label-theme">30% Off</span>
+                                    <span
+                                        class="label label-theme">{{ number_format(($discount->discount / $discount->regular_price) * 100) }}%
+                                        Off</span>
                                 </div>
                                 <div class="cart-wrap">
                                     <ul>
@@ -1667,7 +1681,9 @@
                             <div class="product-style-3 product-style-chair">
                                 <div class="product-title d-block mb-0">
                                     <div class="r-price">
-                                        <div class="theme-color">$21</div>
+                                        <div class="theme-color">
+                                            ${{ number_format($discount->regular_price * ((number_format(($discount->discount / $discount->regular_price) * 100,2)) / 100), 2) }}
+                                        </div>
                                         <div class="main-price">
                                             <ul class="rating mb-1 mt-0">
                                                 <li>
@@ -1688,9 +1704,9 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <p class="font-light mb-sm-2 mb-0">Multicolor Dress</p>
+                                    <p class="font-light mb-sm-2 mb-0">{{ $discount->category->name }}</p>
                                     <a href="product/details.html" class="font-default">
-                                        <h5>Skater Multicolor Dress</h5>
+                                        <h5>{{ $discount->name }}</h5>
                                     </a>
                                 </div>
                             </div>
@@ -2164,6 +2180,4 @@
         </div>
     </section>
     <div id="qvmodal"></div>
-
-
 @endsection

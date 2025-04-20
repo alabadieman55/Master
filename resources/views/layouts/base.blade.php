@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,9 +21,9 @@
     <meta name="keywords" content="Surfside Media">
     <meta name="author" content="Surfside Media">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    
+
     <title>SurfsideMedia</title>
-    
+
     <link id="rtl-link" rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/vendors/ion.rangeSlider.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/font-awesome.css') }}">
@@ -46,9 +47,9 @@
             }
         }
     </style>
-<link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 
-@stack('styles')
+    @stack('styles')
 
 
 </head>
@@ -116,9 +117,9 @@
                         <div class="main-menu">
                             <div class="menu-left">
                                 <div class="brand-logo">
-                                    <a href="{{route('app.index')}}">
-                                        <img src="{{ asset('assets/images/logo.png') }}" class="h-logo img-fluid blur-up lazyload"
-                                            alt="logo">
+                                    <a href="{{ route('app.index') }}">
+                                        <img src="{{ asset('assets/images/logo.png') }}"
+                                            class="h-logo img-fluid blur-up lazyload" alt="logo">
                                     </a>
                                 </div>
 
@@ -137,9 +138,12 @@
                                                     </span>
                                                 </div>
                                             </li>
-                                            <li><a href="{{route('app.index')}}" class="nav-link menu-title">Home</a></li>
-                                            <li><a href="{{route('shop.index')}}" class="nav-link menu-title">Shop</a></li>
-                                            <li><a href="{{route('cart.index')}}" class="nav-link menu-title">Cart</a></li>
+                                            <li><a href="{{ route('app.index') }}" class="nav-link menu-title">Home</a>
+                                            </li>
+                                            <li><a href="{{ route('shop.index') }}"
+                                                    class="nav-link menu-title">Shop</a></li>
+                                            <li><a href="{{ route('cart.index') }}"
+                                                    class="nav-link menu-title">Cart</a></li>
                                             <li><a href="about-us.html" class="nav-link menu-title">About Us</a></li>
                                             <li><a href="contact-us.html" class="nav-link menu-title">Contact Us</a>
                                             </li>
@@ -157,65 +161,71 @@
                                     </li>
                                     <li class="onhover-dropdown wishlist-dropdown">
                                         <div class="cart-media">
-                                            <a href="{{route('wishlist.list')}}">
+                                            <a href="{{ route('wishlist.list') }}">
                                                 <i data-feather="heart"></i>
                                                 <span id="wishlist-count" class="label label-theme rounded-pill">
-                                               {{Cart::instance('wishlist')->count()}}
+                                                    {{ Cart::instance('wishlist')->count() }}
                                                 </span>
                                             </a>
                                         </div>
                                     </li>
                                     <li class="onhover-dropdown wishlist-dropdown">
                                         <div class="cart-media">
-                                            <a href="{{route('cart.index')}}">
+                                            <a href="{{ route('cart.index') }}">
                                                 <i data-feather="shopping-cart"></i>
                                                 <span id="cart-count" class="label label-theme rounded-pill">
-                                                    {{Cart::instance('cart')->content()->count()}}
+                                                    {{ Cart::instance('cart')->content()->count() }}
                                                 </span>
                                             </a>
                                         </div>
                                     </li>
                                     <li class="onhover-dropdown">
                                         <div class="cart-media name-usr">
-                                        @auth
-                                  <span>{{ Auth::user()->name }} </span>
-                                         @endauth
-                                     <i data-feather="user"></i>                                       
-                                        <div class="onhover-div profile-dropdown">
-                                            <ul>
-                                                @if (Route::has('login'))
-                                                @auth
-                                                @if (Auth::user()->Utype ==='ADM')
-                                                <li>
-                                                <a href="{{route('admin.index')}}" class="d-block">Dashboard</a>
+                                            @auth
+                                                <span>{{ Auth::user()->name }} </span>
+                                            @endauth
+                                            <i data-feather="user"></i>
+                                            <div class="onhover-div profile-dropdown">
+                                                <ul>
+                                                    @if (Route::has('login'))
+                                                        @auth
+                                                            @if (Auth::user()->Utype === 'ADM')
+                                                                <li>
+                                                                    <a href="/admin"
+                                                                        class="d-block">Dashboard</a>
 
-                                                </li>
-                                                @else
-                                                <li>
-                                                    <a href="{{route('user.index')}}" class="d-block">My Account</a>
-                                                </li>
-                                                @endif
-                                                  <li>
-                                                  <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('frmlogout').submit();" class="d-block">Logout</a>
-                                                           <form id="frmlogout" action="{{ route('logout') }}" method="POST">
-                                                                   @csrf
-                                                             </form>
-                                                    @csrf
-                                                </form>
-                                                </li>
-                                                @else
-                                                <li>
-                                                    <a href="{{route('login')}}" class="d-block">Login</a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{route('register')}}" class="d-block">Register</a>
-                                                </li>
-                                                @endauth
-                                                @endif
-                                              
+                                                                </li>
+                                                            @else
+                                                                <li>
+                                                                    <a href="{{ route('user.index') }}"
+                                                                        class="d-block">My Account</a>
+                                                                </li>
+                                                            @endif
+                                                            <li>
+                                                                <a href="{{ route('logout') }}"
+                                                                    onclick="event.preventDefault(); document.getElementById('frmlogout').submit();"
+                                                                    class="d-block">Logout</a>
+                                                                <form id="frmlogout" action="{{ route('logout') }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                </form>
+                                                                @csrf
+                                                                </form>
+                                                            </li>
+                                                        @else
+                                                            <li>
+                                                                <a href="{{ route('login') }}" class="d-block">Login</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="{{ route('register') }}"
+                                                                    class="d-block">Register</a>
+                                                            </li>
+                                                        @endauth
+                                                    @endif
 
-                                            </ul>
-                                        </div>
+
+                                                </ul>
+                                            </div>
                                     </li>
                                 </ul>
                             </div>
@@ -274,7 +284,7 @@
             </li>
         </ul>
     </div>
-@yield('content')
+    @yield('content')
     <div id="qvmodal"></div>
 
     <footer class="footer-sm-space mt-5">
@@ -285,8 +295,8 @@
                         <div class="footer-contact">
                             <div class="brand-logo">
                                 <a href="index.htm" class="footer-logo float-start">
-                                    <img src="{{asset('assets/images/logo.png')}}" class="f-logo img-fluid blur-up lazyload"
-                                        alt="logo">
+                                    <img src="{{ asset('assets/images/logo.png') }}"
+                                        class="f-logo img-fluid blur-up lazyload" alt="logo">
                                 </a>
                             </div>
                             <ul class="contact-lists" style="clear:both;">
@@ -386,7 +396,8 @@
                             <h3>Let’s stay in touch</h3>
                             <div class="form-newsletter">
                                 <div class="input-group mb-4">
-                                    <input type="text" class="form-control color-4" placeholder="Your Email Address">
+                                    <input type="text" class="form-control color-4"
+                                        placeholder="Your Email Address">
                                     <span class="input-group-text" id="basic-addon4"><i
                                             class="fas fa-arrow-right"></i></span>
                                 </div>
@@ -482,8 +493,8 @@
                             </div>
                             <div class="modal-product">
                                 <div class="modal-contain-img">
-                                    <img src="assets/images/fashion/instagram/4.jpg" class="img-fluid blur-up lazyload"
-                                        alt="">
+                                    <img src="assets/images/fashion/instagram/4.jpg"
+                                        class="img-fluid blur-up lazyload" alt="">
                                 </div>
                                 <div class="modal-contain-details">
                                     <h4>Premier Cropped Skinny Jean</h4>
@@ -608,27 +619,27 @@
         </a>
     </div>
     <div class="bg-overlay"></div>
-    <script src="{{asset('assets/js/jquery-3.5.1.min.js')}}"></script>
-    <script src="{{asset('assets/js/bootstrap/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('assets/js/feather/feather.min.js')}}"></script>
-    <script src="{{asset('assets/js/lazysizes.min.js')}}"></script>
-    <script src="{{asset('assets/js/slick/slick.js')}}"></script>
-    <script src="{{asset('assets/js/slick/slick-animation.min.js')}}"></script>
-    <script src="{{asset('assets/js/slick/custom_slick.js')}}"></script>
-    <script src="{{asset('assets/js/price-filter.js')}}"></script>
-    <script src="{{asset('assets/js/ion.rangeSlider.min.js')}}"></script>
-    <script src="{{asset('assets/js/filter.js')}}"></script>
-    <script src="{{asset('assets/js/newsletter.js')}}"></script>
-    <script src="{{asset('assets/js/cart_modal_resize.js')}}"></script>
-    <script src="{{asset('assets/js/bootstrap/bootstrap-notify.min.js')}}"></script>
-    <script src="{{asset('assets/js/theme-setting.js')}}"></script>
-    <script src="{{asset('assets/js/script.js')}}"></script>
+    <script src="{{ asset('assets/js/jquery-3.5.1.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/js/feather/feather.min.js') }}"></script>
+    <script src="{{ asset('assets/js/lazysizes.min.js') }}"></script>
+    <script src="{{ asset('assets/js/slick/slick.js') }}"></script>
+    <script src="{{ asset('assets/js/slick/slick-animation.min.js') }}"></script>
+    <script src="{{ asset('assets/js/slick/custom_slick.js') }}"></script>
+    <script src="{{ asset('assets/js/price-filter.js') }}"></script>
+    <script src="{{ asset('assets/js/ion.rangeSlider.min.js') }}"></script>
+    <script src="{{ asset('assets/js/filter.js') }}"></script>
+    <script src="{{ asset('assets/js/newsletter.js') }}"></script>
+    <script src="{{ asset('assets/js/cart_modal_resize.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap/bootstrap-notify.min.js') }}"></script>
+    <script src="{{ asset('assets/js/theme-setting.js') }}"></script>
+    <script src="{{ asset('assets/js/script.js') }}"></script>
     <script>
-        $(function () {
+        $(function() {
             $('[data-bs-toggle="tooltip"]').tooltip()
         });
     </script>
-@stack('scripts')
+    @stack('scripts')
 </body>
 
 </html>

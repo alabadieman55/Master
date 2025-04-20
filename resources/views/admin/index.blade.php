@@ -1,7 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
 
-@extends('layouts.base')
-@section('content')
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surfside Media - Admin Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
-<h1>Admin Dashboard</h1>
+    <link rel="stylesheet" href="{{ asset('assets/css/dashboard.css') }}">
 
-@endsection
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-text">SURFSIDE MEDIA</div>
+                </div>
+                <div class="colored-dots">
+                    <div class="dot dot-1"></div>
+                    <div class="dot dot-2"></div>
+                    <div class="dot dot-3"></div>
+                    <div class="dot dot-4"></div>
+                    <div class="dot dot-5"></div>
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-header">DASHBOARD</div>
+                <ul>
+                    <li class="menu-item active">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Analytics</span>
+                    </li>
+                </ul>
+
+                <div class="menu-header">CATALOG</div>
+                <a href="/products" style="text-decoration: none;">
+                    <ul>
+                        <li class="menu-item">
+                            <i class="fas fa-tshirt" style="color: white"></i>
+                            <span style="color: white">Products</span>
+                        </li>
+                </a>
+
+
+                <a href="/categories" style="text-decoration: none;">
+
+                    <li class="menu-item">
+                        <i class="fas fa-tags" style="color: white"></i>
+                        <span style="color: white">Categories</span>
+                    </li>
+                </a>
+
+
+
+                <li class="menu-item">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Collections</span>
+                </li>
+                <li class="menu-item">
+                    <i class="fas fa-percentage"></i>
+                    <span>Discounts</span>
+                </li>
+                </ul>
+
+                <div class="menu-header">SALES</div>
+                <ul>
+                    <li class="menu-item">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Orders</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Returns</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-truck"></i>
+                        <span>Shipping</span>
+                    </li>
+                </ul>
+
+                <div class="menu-header">CONTENT</div>
+                <ul>
+                    <li class="menu-item">
+                        <i class="fas fa-home"></i>
+                        <span>Home Banner</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-blog"></i>
+                        <span>Blog Posts</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Pages</span>
+                    </li>
+                </ul>
+
+                <div class="menu-header">USERS</div>
+                <ul>
+                    <li class="menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Customers</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Admin Users</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Roles & Permissions</span>
+                    </li>
+                </ul>
+
+                <div class="menu-header">SETTINGS</div>
+                <ul>
+                    <li class="menu-item">
+                        <i class="fas fa-store"></i>
+                        <span>Store Settings</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Payment Methods</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-cog"></i>
+                        <span>General Settings</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="left-section">
+                    <button class="toggle-sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <div class="nav-right">
+                    <div class="nav-item">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-envelope"></i>
+                        <span class="badge">5</span>
+                    </div>
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="page-header">
+                    <h1 class="page-title">Dashboard</h1>
+                    <ul class="breadcrumb">
+                        <li>Home</li>
+                        <li>Dashboard</li>
+                    </ul>
+                </div>
+
+                <div class="stats-cards">
+                    <div class="card stat-card">
+                        <div class="stat-icon bg-primary">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>{{ $orders }}</h3>
+                            <p>Total Orders</p>
+                        </div>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="stat-icon bg-success">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>$42,562</h3>
+                            <p>Total Revenue</p>
+                        </div>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="stat-icon bg-warning">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>{{ $users }}</h3>
+                            <p>Total Customers</p>
+                        </div>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="stat-icon bg-info">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>{{ $products }}</h3>
+                            <p>Total Products</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-row">
+                    <div class="card recent-orders">
+                        <div class="card-header">
+                            <h3>Recent Orders</h3>
+                            <span class="card-header-action">View All</span>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#ORD-5289</td>
+                                    <td>Jane Smith</td>
+                                    <td>18 Apr, 2025</td>
+                                    <td>$129.99</td>
+                                    <td><span class="status status-delivered">Delivered</span></td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD-5288</td>
+                                    <td>Mike Johnson</td>
+                                    <td>17 Apr, 2025</td>
+                                    <td>$79.00</td>
+                                    <td><span class="status status-pending">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD-5287</td>
+                                    <td>Alex Williams</td>
+                                    <td>17 Apr, 2025</td>
+                                    <td>$158.00</td>
+                                    <td><span class="status status-delivered">Delivered</span></td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD-5286</td>
+                                    <td>Sarah Davis</td>
+                                    <td>16 Apr, 2025</td>
+                                    <td>$65.00</td>
+                                    <td><span class="status status-failed">Failed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD-5285</td>
+                                    <td>John Brown</td>
+                                    <td>16 Apr, 2025</td>
+                                    <td>$198.50</td>
+                                    <td><span class="status status-delivered">Delivered</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Top Selling Products</h3>
+                            <span class="card-header-action">View All</span>
+                        </div>
+                        <div class="top-products">
+                            <div class="product-item">
+                                <img src="/api/placeholder/50/50" alt="Green Dress" class="product-image">
+                                <div class="product-details">
+                                    <div class="product-name">Green Pattern Dress</div>
+                                    <div class="product-price">$79.00</div>
+                                </div>
+                                <div class="product-sales">142 sold</div>
+                            </div>
+
+                            <div class="product-item">
+                                <img src="/api/placeholder/50/50" alt="Leopard Hoodie" class="product-image">
+                                <div class="product-details">
+                                    <div class="product-name">Leopard Print Hoodie</div>
+                                    <div class="product-price">$65.00</div>
+                                </div>
+                                <div class="product-sales">98 sold</div>
+                            </div>
+
+                            <div class="product-item">
+                                <img src="/api/placeholder/50/50" alt="Black Jacket" class="product-image">
+                                <div class="product-details">
+                                    <div class="product-name">Black Modern Jacket</div>
+                                    <div class="product-price">$89.99</div>
+                                </div>
+                                <div class="product-sales">87 sold</div>
+                            </div>
+
+                            <div class="product-item">
+                                <img src="/api/placeholder/50/50" alt="Green Fashion" class="product-image">
+                                <div class="product-details">
+                                    <div class="product-name">Green Fashion Set</div>
+                                    <div class="product-price">$129.00</div>
+                                </div>
+                                <div class="product-sales">76 sold</div>
+                            </div>
+
+                            <div class="product-item">
+                                <img src="/api/placeholder/50/50" alt="Pink Dress" class="product-image">
+                                <div class="product-details">
+                                    <div class="product-name">Pink V-neck Dress</div>
+                                    <div class="product-price">$69.99</div>
+                                </div>
+                                <div class="product-sales">63 sold</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+
+            // Update all dropdown arrows
+            document.querySelectorAll('.dropdown-arrow').forEach(arrow => {
+                if (sidebar.classList.contains('collapsed')) {
+                    arrow.classList.remove('fa-chevron-right');
+                    arrow.classList.add('fa-chevron-down');
+                } else {
+                    arrow.classList.remove('fa-chevron-down');
+                    arrow.classList.add('fa-chevron-right');
+                }
+            });
+        });
+
+        // Add active class to menu items on click
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                menuItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

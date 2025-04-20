@@ -18,6 +18,7 @@ class AuthAdmin
             return redirect()->route('login');
         }
 
+
         return $next($request);
     }
 }

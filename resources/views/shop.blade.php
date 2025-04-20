@@ -1,22 +1,21 @@
 @extends('layouts.base')
 @section('content')
-@push('styles')
-<link id="color-link" rel="stylesheet" type="text/css" href="assets/css/demo2.css">
-<style>
+    @push('styles')
+        <link id="color-link" rel="stylesheet" type="text/css" href="assets/css/demo2.css">
+        <style>
+            nav svg {
+                height: 20px;
 
-    nav svg{
-        height: 20px;
+            }
 
-    }
+            .product-box .product-details h5 {
 
-    .product-box .product-details h5 {
-    
-    width: 100%;
-    
-}
-    </style>
-@endpush
-<section class="breadcrumb-section section-b-space" style="padding-top:20px;padding-bottom:20px;">
+                width: 100%;
+
+            }
+        </style>
+    @endpush
+    <section class="breadcrumb-section section-b-space" style="padding-top:20px;padding-bottom:20px;">
         <ul class="circles">
             <li></li>
             <li></li>
@@ -143,8 +142,8 @@
 
                                             <li>
                                                 <div class="form-check ps-0 custome-form-check">
-                                                    <input class="checkbox_animated check-it" id="br9" name="brands"
-                                                        value="9" type="checkbox">
+                                                    <input class="checkbox_animated check-it" id="br9"
+                                                        name="brands" value="9" type="checkbox">
                                                     <label class="form-check-label">Sequi Reprehenderit</label>
                                                     <p class="font-light">(5)</p>
                                                 </div>
@@ -152,8 +151,8 @@
 
                                             <li>
                                                 <div class="form-check ps-0 custome-form-check">
-                                                    <input class="checkbox_animated check-it" id="br10" name="brands"
-                                                        value="10" type="checkbox">
+                                                    <input class="checkbox_animated check-it" id="br10"
+                                                        name="brands" value="10" type="checkbox">
                                                     <label class="form-check-label">Sunt Corrupti</label>
                                                     <p class="font-light">(3)</p>
                                                 </div>
@@ -233,7 +232,8 @@
                                     aria-labelledby="headingFour" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
                                         <div class="range-slider category-list">
-                                            <input type="text" class="js-range-slider" id="js-range-price" value="">
+                                            <input type="text" class="js-range-slider" id="js-range-price"
+                                                value="">
                                         </div>
                                     </div>
                                 </div>
@@ -286,22 +286,22 @@
                                     <div class="accordion-body category-scroll">
                                         <ul class="category-list">
                                             @foreach ($categories as $category)
-                                             
-                                         <li>
-                                                <div class="form-check ps-0 custome-form-check">
-                                                    <input class="checkbox_animated check-it" id="ct{{$category->id}}" name="categories" @if(in_array($category->id,explode(',',$q_categories))) checked="checked" @endif type="checkbox" value="{{$category->id}}" onchange="filiterproductesByCategory(this)">
-                                                    <label class="form-check-label">{{$category->name}}</label>
-                                                    <p class="font-light">({{$category->products->count()}})</p>
-                                                </div>
-                                            </li>
-                                                   
-
-
+                                                <li>
+                                                    <div class="form-check ps-0 custome-form-check">
+                                                        <input class="checkbox_animated check-it"
+                                                            id="ct{{ $category->id }}" name="categories"
+                                                            @if (in_array($category->id, explode(',', $q_categories))) checked="checked" @endif
+                                                            type="checkbox" value="{{ $category->id }}"
+                                                            onchange="filiterproductesByCategory(this)">
+                                                        <label class="form-check-label">{{ $category->name }}</label>
+                                                        <p class="font-light">({{ $category->products->count() }})</p>
+                                                    </div>
+                                                </li>
                                             @endforeach
                                             <li>
                                                 <div class="form-check ps-0 custome-form-check">
-                                                    <input class="checkbox_animated check-it" id="ct1" name="categories"
-                                                        type="checkbox" value="1">
+                                                    <input class="checkbox_animated check-it" id="ct1"
+                                                        name="categories" type="checkbox" value="1">
                                                     <label class="form-check-label">Qui Ut</label>
                                                     <p class="font-light">(7)</p>
                                                 </div>
@@ -309,8 +309,8 @@
 
                                             <li>
                                                 <div class="form-check ps-0 custome-form-check">
-                                                    <input class="checkbox_animated check-it" id="ct2" name="categories"
-                                                        type="checkbox" value="2">
+                                                    <input class="checkbox_animated check-it" id="ct2"
+                                                        name="categories" type="checkbox" value="2">
                                                     <label class="form-check-label">Blanditiis Error</label>
                                                     <p class="font-light">(8)</p>
                                                 </div>
@@ -318,8 +318,8 @@
 
                                             <li>
                                                 <div class="form-check ps-0 custome-form-check">
-                                                    <input class="checkbox_animated check-it" id="ct3" name="categories"
-                                                        type="checkbox" value="3">
+                                                    <input class="checkbox_animated check-it" id="ct3"
+                                                        name="categories" type="checkbox" value="3">
                                                     <label class="form-check-label">Quam Quos</label>
                                                     <p class="font-light">(0)</p>
                                                 </div>
@@ -327,8 +327,8 @@
 
                                             <li>
                                                 <div class="form-check ps-0 custome-form-check">
-                                                    <input class="checkbox_animated check-it" id="ct4" name="categories"
-                                                        type="checkbox" value="4">
+                                                    <input class="checkbox_animated check-it" id="ct4"
+                                                        name="categories" type="checkbox" value="4">
                                                     <label class="form-check-label">Cupiditate Minus</label>
                                                     <p class="font-light">(5)</p>
                                                 </div>
@@ -336,8 +336,8 @@
 
                                             <li>
                                                 <div class="form-check ps-0 custome-form-check">
-                                                    <input class="checkbox_animated check-it" id="ct5" name="categories"
-                                                        type="checkbox" value="5">
+                                                    <input class="checkbox_animated check-it" id="ct5"
+                                                        name="categories" type="checkbox" value="5">
                                                     <label class="form-check-label">Dolores Et</label>
                                                     <p class="font-light">(4)</p>
                                                 </div>
@@ -345,8 +345,8 @@
 
                                             <li>
                                                 <div class="form-check ps-0 custome-form-check">
-                                                    <input class="checkbox_animated check-it" id="ct6" name="categories"
-                                                        type="checkbox" value="6">
+                                                    <input class="checkbox_animated check-it" id="ct6"
+                                                        name="categories" type="checkbox" value="6">
                                                     <label class="form-check-label">Quis Repudiandae</label>
                                                     <p class="font-light">(0)</p>
                                                 </div>
@@ -416,20 +416,32 @@
                                     <div class="page-view-filter">
                                         <div class="dropdown select-featured">
                                             <select class="form-select" name="orderby" id="orderby">
-                                                <option value="-1" {{$order== -1? 'selected': '' }}>Default</option>
-                                                <option value="1" {{$order== 1? 'selected': '' }}>Date, New To Old</option>
-                                                <option value="2"{{$order== 2? 'selected': '' }}>Date, Old To New</option>
-                                                <option value="3"{{$order== 3? 'selected': '' }}>Price, Low To High</option>
-                                                <option value="4"{{$order== 4? 'selected': '' }}>Price, High To Low</option>
+                                                <option value="-1" {{ $order == -1 ? 'selected' : '' }}>Default
+                                                </option>
+                                                <option value="1" {{ $order == 1 ? 'selected' : '' }}>Date, New To Old
+                                                </option>
+                                                <option value="2"{{ $order == 2 ? 'selected' : '' }}>Date, Old To New
+                                                </option>
+                                                <option value="3"{{ $order == 3 ? 'selected' : '' }}>Price, Low To
+                                                    High
+                                                </option>
+                                                <option value="4"{{ $order == 4 ? 'selected' : '' }}>Price, High To
+                                                    Low
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="dropdown select-featured">
                                         <select class="form-select" name="size" id="pagesize">
-                                            <option value="12" {{$size == 12 ? 'selected':''}} >12 Products Per Page</option>
-                                            <option value="24"{{$size ==24 ? 'selected':''}}>24 Products Per Page</option>
-                                            <option value="52"{{$size == 52 ? 'selected':''}}>52 Products Per Page</option>
-                                            <option value="100"{{$size == 100 ? 'selected':''}}>100 Products Per Page</option>
+                                            <option value="12" {{ $size == 12 ? 'selected' : '' }}>12 Products Per Page
+                                            </option>
+                                            <option value="24"{{ $size == 24 ? 'selected' : '' }}>24 Products Per Page
+                                            </option>
+                                            <option value="52"{{ $size == 52 ? 'selected' : '' }}>52 Products Per Page
+                                            </option>
+                                            <option value="100"{{ $size == 100 ? 'selected' : '' }}>100 Products Per
+                                                Page
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
@@ -470,86 +482,88 @@
                     <div
                         class="row g-sm-4 g-3 row-cols-lg-4 row-cols-md-3 row-cols-2 mt-1 custom-gy-5 product-style-2 ratio_asos product-list-section">
                         @foreach ($products as $product)
-                        <div>
-                            <div class="product-box">
-                                <div class="img-wrapper">
-                                    <div class="front">
-                                        <a href="{{route('shop.product.details',['slug'=>$product->slug])}}">
-                                            <img src="{{ asset('assets/images/fashion/product/front/' . $product->image) }}"
-                                                class="bg-img blur-up lazyload" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="back">
-                                        <a href="{{route('shop.product.details',['slug'=>$product->slug])}}">
-                                            <img src="assets/images/fashion/product/back/{{$product->image}}"
-                                                class="bg-img blur-up lazyload" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="cart-wrap">
-                                        <ul>
-                                            <li>
-                                                <a href="javascript:void(0)" class="addtocart-btn">
-                                                    <i data-feather="shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0)">
-                                                    <i data-feather="eye"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                            <a href="javascript:void(0)" 
-                                            onclick="addProductToWishlist({{$product->id}}, '{{$product->name}}', 1, {{$product->regular_price}})" class="wishlist">
-                                           
-                                        <i data-feather="heart"></i>
-
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-details">
-                                    <div class="rating-details">
-                                        <span class="font-light grid-content">{{$product->category->name}}</span>
-                                        <ul class="rating mt-0">
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="main-price">
-                                        <a href="{{route('shop.product.details',['slug'=>$product->slug])}}" class="font-default">
-                                            <h5 class="ms-0">{{$product->name}}</h5>
-                                        </a>
-                                        <div class="listing-content">
-                                            <span class="font-light">{{$product->category->name}}</span>
-                                            <p class="font-light">{{$product->short_description}}</p>
+                            <div>
+                                <div class="product-box">
+                                    <div class="img-wrapper">
+                                        <div class="front">
+                                            <a href="{{ route('shop.product.details', ['slug' => $product->slug]) }}">
+                                                <img src="{{ asset('storage/products/' . $product->image) }}"
+                                                    class="bg-img blur-up lazyload" alt="">
+                                            </a>
                                         </div>
-                                        <h3 class="theme-color">{{$product->regular_price}}</h3>
-                                        <button class="btn listing-content">Add To Cart</button>
+                                        <div class="back">
+                                            <a href="{{ route('shop.product.details', ['slug' => $product->slug]) }}">
+                                                <img src="assets/images/fashion/product/back/{{ $product->image }}"
+                                                    class="bg-img blur-up lazyload" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="cart-wrap">
+                                            <ul>
+                                                <li>
+                                                    <a href="javascript:void(0)" class="addtocart-btn">
+                                                        <i data-feather="shopping-cart"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        <i data-feather="eye"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0)"
+                                                        onclick="addProductToWishlist({{ $product->id }}, '{{ $product->name }}', 1, {{ $product->regular_price }})"
+                                                        class="wishlist">
+
+                                                        <i data-feather="heart"></i>
+
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="product-details">
+                                        <div class="rating-details">
+                                            <span class="font-light grid-content">{{ $product->category->name }}</span>
+                                            <ul class="rating mt-0">
+                                                <li>
+                                                    <i class="fas fa-star theme-color"></i>
+                                                </li>
+                                                <li>
+                                                    <i class="fas fa-star theme-color"></i>
+                                                </li>
+                                                <li>
+                                                    <i class="fas fa-star"></i>
+                                                </li>
+                                                <li>
+                                                    <i class="fas fa-star"></i>
+                                                </li>
+                                                <li>
+                                                    <i class="fas fa-star"></i>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="main-price">
+                                            <a href="{{ route('shop.product.details', ['slug' => $product->slug]) }}"
+                                                class="font-default">
+                                                <h5 class="ms-0">{{ $product->name }}</h5>
+                                            </a>
+                                            <div class="listing-content">
+                                                <span class="font-light">{{ $product->category->name }}</span>
+                                                <p class="font-light">{{ $product->short_description }}</p>
+                                            </div>
+                                            <h3 class="theme-color">{{ $product->regular_price }}</h3>
+                                            <button class="btn listing-content">Add To Cart</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                           @endforeach
+                        @endforeach
 
 
 
-                           
+
                     </div>
-                    {{$products->withQuerystring()->links("pagination.default")}}
+                    {{ $products->withQuerystring()->links('pagination.default') }}
 
                 </div>
             </div>
@@ -580,112 +594,107 @@
         </div>
     </section>
     <!-- Subscribe Section End -->
-<form id ="frmFilter" method="GET"> 
-    <input type="hidden" name="page" id="page" value="{{$page}}"/>
-    <input type="hidden" name="size" id="size" value="{{$size}}"/>
-    <input type="hidden" name="order" id="order" value="{{$order}}"/>
-    <input type="hidden" name="categories" id="categories" value="{{$q_categories}}"/>
-    <input type="hidden" name="prange" id="prange" value=""/>
-         
+    <form id ="frmFilter" method="GET">
+        <input type="hidden" name="page" id="page" value="{{ $page }}" />
+        <input type="hidden" name="size" id="size" value="{{ $size }}" />
+        <input type="hidden" name="order" id="order" value="{{ $order }}" />
+        <input type="hidden" name="categories" id="categories" value="{{ $q_categories }}" />
+        <input type="hidden" name="prange" id="prange" value="" />
 
-</form>
-    @endsection
-    @push('scripts')
+
+    </form>
+@endsection
+@push('scripts')
     <script>
- $(function(){
-$("#pagesize").on("change", function () {
-    $("#size").val($("#pagesize").val());
-    $("#frmFilter").submit();
-});
+        $(function() {
+            $("#pagesize").on("change", function() {
+                $("#size").val($("#pagesize").val());
+                $("#frmFilter").submit();
+            });
 
-$("#orderby").on("change", function () {
-    $("#order").val($("#orderby").val());
-   $("#frmFilter").submit();
-});
- 
-var $range=$(".js-range-slider");
-instance=$range.data("ionRangeSlider");
-instance.update({
-    from:{{$from}},
-    to:{{$to}},
+            $("#orderby").on("change", function() {
+                $("#order").val($("#orderby").val());
+                $("#frmFilter").submit();
+            });
 
-
-});
-
- $("#prange").on("change",function(){
-
-    setTimeout(()=>{
-        $("#frmFilter").submit();
-},1000)
-    });
-
-});
+            var $range = $(".js-range-slider");
+            instance = $range.data("ionRangeSlider");
+            instance.update({
+                from: {{ $from }},
+                to: {{ $to }},
 
 
-function filiterproductesByCategory(categories){
-    var categories = "";
-    $("input[name='categories']:checked").each(function () {
-        if(categories=="")
-    {
-        categories+= "," + this.value;
-    }
-    else
-    {
-        categories+= "," + this.value;
-    }
-    });
-    $("#categories").val(categories);
-    $("#frmFilter").submit();
+            });
 
-}
+            $("#prange").on("change", function() {
 
-function addProductToWishlist(id, name, quantity, price) {
-    $.ajax({
-        type: 'POST',
-        url: "{{ route('wishlist.store') }}",
-        data: {
-            "_token": "{{ csrf_token() }}", // Include CSRF token
-            id: id,
-            name: name,
-            quantity: quantity,
-            price: price,
-        },
-        success: function(data) {
-            if (data.status == 200) {
-                getCartWishlistCount(); // Update the wishlist count
-                $.notify({
-                    icon: 'fa fa-check',
-                    title: "Success!",
-                    message: "Item successfully added to your wishlist!"
-                });
-            } else {
-                console.error('Error:', data.message);
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('AJAX Error:', error);
+                setTimeout(() => {
+                    $("#frmFilter").submit();
+                }, 1000)
+            });
+
+        });
+
+
+        function filiterproductesByCategory(categories) {
+            var categories = "";
+            $("input[name='categories']:checked").each(function() {
+                if (categories == "") {
+                    categories += "," + this.value;
+                } else {
+                    categories += "," + this.value;
+                }
+            });
+            $("#categories").val(categories);
+            $("#frmFilter").submit();
+
         }
-    });
-}
 
-function getCartWishlistCount() {
-    $.ajax({
-        type: 'GET',
-        url: "{{ route('shop.cart.wishlist.count') }}",
-        success: function(data) {
-            if (data.status == 200) {
-                $("#cartCount").html(data.cartCount); // Update cart count
-                $("#wishlist-count").html(data.wishlistCount); // Update wishlist count
-            } else {
-                console.error('Error:', data.message);
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('AJAX Error:', error);
+        function addProductToWishlist(id, name, quantity, price) {
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('wishlist.store') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}", // Include CSRF token
+                    id: id,
+                    name: name,
+                    quantity: quantity,
+                    price: price,
+                },
+                success: function(data) {
+                    if (data.status == 200) {
+                        getCartWishlistCount(); // Update the wishlist count
+                        $.notify({
+                            icon: 'fa fa-check',
+                            title: "Success!",
+                            message: "Item successfully added to your wishlist!"
+                        });
+                    } else {
+                        console.error('Error:', data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                }
+            });
         }
-    });
-}
 
-
+        function getCartWishlistCount() {
+            $.ajax({
+                type: 'GET',
+                url: "{{ route('shop.cart.wishlist.count') }}",
+                success: function(data) {
+                    if (data.status == 200) {
+                        $("#cartCount").html(data.cartCount); // Update cart count
+                        $("#wishlist-count").html(data.wishlistCount); // Update wishlist count
+                    } else {
+                        console.error('Error:', data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                }
+            });
+        }
     </script>
-    @endpush
+@endpush

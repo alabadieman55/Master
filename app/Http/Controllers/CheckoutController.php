@@ -9,13 +9,17 @@ use Stripe\Exception\ApiErrorException;
 use App\Models\Order; // Assuming you have an Order model
 use App\Models\OrderItem; // Assuming you have an OrderItem model
 use Illuminate\Support\Facades\Session;
+use Cart;
+
 
 class CheckoutController extends Controller
 {
     public function checkout()
     {
+        $cartItems = Cart::instance('cart')->content();
+
         // Display the checkout page
-        return view('checkout');
+        return view('checkout', ['cartItems' => $cartItems]);
     }
 
     public function createPaymentIntent(Request $request)
@@ -75,7 +79,7 @@ class CheckoutController extends Controller
             $order->total_amount = $this->getCartTotal();
             $order->payment_method = 'stripe';
             $order->payment_status = 'paid';
-            
+
             // Add billing address data
             $order->billing_name = $request->session()->get('billing.name');
             $order->billing_address = $request->session()->get('billing.address');
@@ -83,7 +87,7 @@ class CheckoutController extends Controller
             $order->billing_state = $request->session()->get('billing.state');
             $order->billing_zip = $request->session()->get('billing.zip');
             $order->billing_phone = $request->session()->get('billing.phone');
-            
+
             // Add shipping address data if different
             if (!$request->session()->get('same_as_billing')) {
                 $order->shipping_name = $request->session()->get('shipping.name');
@@ -101,9 +105,9 @@ class CheckoutController extends Controller
                 $order->shipping_zip = $order->billing_zip;
                 $order->shipping_phone = $order->billing_phone;
             }
-            
+
             $order->save();
-            
+
             // Save order items
             $cartItems = $this->getCartItems(); // Implement this method to get cart items
             foreach ($cartItems as $item) {
@@ -114,13 +118,12 @@ class CheckoutController extends Controller
                 $orderItem->price = $item->price;
                 $orderItem->save();
             }
-            
+
             // Clear the cart
             $this->clearCart();
-            
+
             return redirect()->route('order.confirmation', ['order_id' => $order->id])
                 ->with('success', 'Your order has been placed successfully!');
-                
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error processing order: ' . $e->getMessage());
         }
@@ -133,20 +136,20 @@ class CheckoutController extends Controller
         // For demonstration, let's return a sample amount
         return 100.00; // $100
     }
-    
+
     private function getCartItems()
     {
         // Implement this method based on your cart implementation
         // Example: return Cart::content();
         return []; // Return empty array for now
     }
-    
+
     private function clearCart()
     {
         // Implement this method to clear the cart
         // Example: Cart::destroy();
     }
-    
+
     private function storeAddressInfo(Request $request)
     {
         // Store billing address
@@ -161,11 +164,11 @@ class CheckoutController extends Controller
             'billing.zip' => $request->zip,
             'billing.country' => $request->country,
         ]);
-        
+
         // Check if shipping is same as billing
         $sameAsBilling = $request->has('sameAsBilling');
         session(['same_as_billing' => $sameAsBilling]);
-        
+
         // Store shipping address if different
         if (!$sameAsBilling) {
             session([
