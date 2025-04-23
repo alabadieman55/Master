@@ -30,7 +30,7 @@
                 </nav>
             </div>
         </div>
-        @endif 
+        @endif
     </div>
 </section>
 <!-- Cart Section Start -->
@@ -54,8 +54,8 @@
                         <tr>
                             <td>
                                 <a href="{{ route('shop.product.details', ['slug' => $item->model->slug]) }}">
-                                    <img src="{{ asset('assets/images/fashion/product/front/' . $item->model->image) }}" 
-                                         class="blur-up lazyload" alt="">
+                                    <img src="{{ asset('storage/products/' . $item->model->image) }}"
+                                        class="blur-up lazyload" alt="{{$item->name}}">
                                 </a>
                             </td>
                             <td>
@@ -84,7 +84,14 @@
                                 </div>
                             </td>
                             <td>
+                                @if($item->model->discount != Null)
+                                <p class="fw-bold"> {{ number_format($item->model->regular_price - $item->model->discount, 2) }}JD
+                                </p>
+
+                                @else
                                 <p class="fw-bold">${{$item->model->regular_price}}</p>
+                                @endif
+
                             </td>
                             <td>
                                 @if($item->model->stock_status == 'instock')
@@ -95,17 +102,17 @@
                             </td>
                             <td>
                                 @if($item->model->stock_status == 'instock')
-                                <a href="javascript:void(0)" class="icon" onclick ="moveToCart('{{$item->rowId}}')">
+                                <a href="javascript:void(0)" class="icon" onclick="moveToCart('{{$item->rowId}}')">
                                     <i class="fas fa-shopping-cart"></i>
                                 </a>
-                               
+
                                 @else
                                 <a href="javascript:void(0)" class="icon disabled ">
                                     <i class="fas fa-shopping-cart"></i>
                                 </a>
 
                                 @endif
-                                <a href="javascript:void(0)" class="icon" onclick="removeFromWishlist('{{$item->rowId}}')">   
+                                <a href="javascript:void(0)" class="icon" onclick="removeFromWishlist('{{$item->rowId}}')">
                                     <i class="fas fa-times"></i>
                                 </a>
                             </td>
@@ -119,37 +126,37 @@
         <div class="row ">
             <div class="col-sm-12  text-end ">
                 <a href="{{route('shop.index')}}" class="btn btn-solid">Continue Shopping</a>
-                <a href="javascript:void(0)"  onclick="clearWishlist()">ClearAll Items</a>
+                <a href="javascript:void(0)" onclick="clearWishlist()">ClearAll Items</a>
             </div>
 
-        @else
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h2>Your wishlist is empty!</h2>
-                <h5 class="mt-3">Add items to it now.</h5>
-                <a href="{{route('shop.index')}}" class="btn btn-warning mt-3">Shop Now</a>
+            @else
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h2>Your wishlist is empty!</h2>
+                    <h5 class="mt-3">Add items to it now.</h5>
+                    <a href="{{route('shop.index')}}" class="btn btn-warning mt-3">Shop Now</a>
+                </div>
             </div>
+            @endif
         </div>
-        @endif
-    </div>
 </section>
 <!-- Cart Section End -->
 
-<form id="deleteFromWishlist"  action="{{route('wishlist.remove')}}"  method="POST" >
-@csrf
-@method('delete')
-    <input type="hidden" name="rowId" id="rowId"  />
+<form id="deleteFromWishlist" action="{{route('wishlist.remove')}}" method="POST">
+    @csrf
+    @method('delete')
+    <input type="hidden" name="rowId" id="rowId" />
 </form>
 
 <form id="clearWishlist" action="{{route('wishlist.clear')}}" method="POST">
     @csrf
-@method('delete')
+    @method('delete')
 </form>
 
-<form id= "moveToCart" action="{{route('wishlist.move.to.cart')}}" method="POST">
+<form id="moveToCart" action="{{route('wishlist.move.to.cart')}}" method="POST">
     @csrf
-   
-    <input type="hidden" name="rowId" id="mrowId"  />
+
+    <input type="hidden" name="rowId" id="mrowId" />
 </form>
 
 @endsection
@@ -166,30 +173,8 @@
     }
 
     function moveToCart(rowId) {
-    $("#mrowId").val(rowId);
-    $("#moveToCart").submit();
-}
-
-
- 
-
-
+        $("#mrowId").val(rowId);
+        $("#moveToCart").submit();
+    }
 </script>
 @endpush
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

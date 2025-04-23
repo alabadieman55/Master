@@ -118,7 +118,7 @@
                             <div class="menu-left">
                                 <div class="brand-logo">
                                     <a href="{{ route('app.index') }}">
-                                        <img src="{{ asset('assets/images/logo.png') }}"
+                                        <img src="{{ asset('assets/images/log2.png') }}"
                                             class="h-logo img-fluid blur-up lazyload" alt="logo">
                                     </a>
                                 </div>
@@ -144,10 +144,9 @@
                                                     class="nav-link menu-title">Shop</a></li>
                                             <li><a href="{{ route('cart.index') }}"
                                                     class="nav-link menu-title">Cart</a></li>
-                                            <li><a href="about-us.html" class="nav-link menu-title">About Us</a></li>
-                                            <li><a href="contact-us.html" class="nav-link menu-title">Contact Us</a>
+                                            <li><a href="\aboutus" class="nav-link menu-title">About Us</a></li>
+                                            <li><a href="\contactus" class="nav-link menu-title">Contact Us</a>
                                             </li>
-                                            <li><a href="blog.html" class="nav-link menu-title">Blog</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -295,25 +294,22 @@
                         <div class="footer-contact">
                             <div class="brand-logo">
                                 <a href="index.htm" class="footer-logo float-start">
-                                    <img src="{{ asset('assets/images/logo.png') }}"
+                                    <img src="{{ asset('assets/images/log2.png') }}"
                                         class="f-logo img-fluid blur-up lazyload" alt="logo">
                                 </a>
                             </div>
                             <ul class="contact-lists" style="clear:both;">
                                 <li>
-                                    <span><b>phone:</b> <span class="font-light"> +1 0000000000</span></span>
+                                    <span><b>phone:</b> <span class="font-light"> +96277608920</span></span>
                                 </li>
+                               
                                 <li>
-                                    <span><b>Address:</b><span class="font-light"> NIT, Faridabad, Haryana,
-                                            India</span></span>
-                                </li>
-                                <li>
-                                    <span><b>Email:</b><span class="font-light"> contact@surfsidemedia.in</span></span>
+                                    <span><b>Email:</b><span class="font-light"> alabadieman58@gmail.com</span></span>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="col-lg-2 col-md-4 col-sm-25">
                         <div class="footer-links">
                             <div class="footer-title">
                                 <h3>About us</h3>
@@ -329,9 +325,7 @@
                                     <li>
                                         <a href="about-us.html" class="font-dark">About Us</a>
                                     </li>
-                                    <li>
-                                        <a href="#" class="font-dark">Blog</a>
-                                    </li>
+                                  
                                     <li>
                                         <a href="contact-us.html" class="font-dark">Contact</a>
                                     </li>
@@ -339,56 +333,11 @@
                             </div>
                         </div>
                     </div>
+                    
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                         <div class="footer-links">
-                            <div class="footer-title">
-                                <h3>New Categories</h3>
-                            </div>
-                            <div class="footer-content">
-                                <ul>
-                                    <li>
-                                        <a href="shop.html" class="font-dark">Latest Shoes</a>
-                                    </li>
-                                    <li>
-                                        <a href="shop.html" class="font-dark">Branded Jeans</a>
-                                    </li>
-                                    <li>
-                                        <a href="shop.html" class="font-dark">New Jackets</a>
-                                    </li>
-                                    <li>
-                                        <a href="shop.html" class="font-dark">Colorfull Hoodies</a>
-                                    </li>
-                                    <li>
-                                        <a href="shop.html" class="font-dark">Shiner Goggles</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-                        <div class="footer-links">
-                            <div class="footer-title">
-                                <h3>Get Help</h3>
-                            </div>
-                            <div class="footer-content">
-                                <ul>
-                                    <li>
-                                        <a href="#" class="font-dark">Your Orders</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="font-dark">Your Account</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="font-dark">Track Orders</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="font-dark">Your Wishlist</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="font-dark">Shopping FAQs</a>
-                                    </li>
-                                </ul>
-                            </div>
+                          
+                           
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-4 col-sm-6 d-none d-sm-block">
@@ -442,7 +391,7 @@
                         </ul>
                     </div>
                     <div class="col-md-6">
-                        <p class="mb-0 font-dark">© 2023, Surfside Media.</p>
+                        <p class="mb-0 font-dark">© 2025, EmaN Hijabs.</p>
                     </div>
                 </div>
             </div>
@@ -638,6 +587,7 @@
         $(function() {
             $('[data-bs-toggle="tooltip"]').tooltip()
         });
+        
     </script>
     @stack('scripts')
 </body>

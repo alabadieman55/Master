@@ -138,11 +138,12 @@
                             <div id="card-errors" class="text-danger mt-2" role="alert"></div>
                         </div>
 
-                        <button id="submit-button" class="btn btn-solid-default mt-4" type="submit">
-                            <div class="spinner hidden" id="spinner"></div>
-                            <span id="button-text">Pay Now</span>
-                        </button>
-                    </form>
+                        <div class="card-body">
+                        <form action="{{ route('checkout.stripe') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-primary btn-block">Pay with Stripe</button>
+                        </form>
+                    </div>
                 </div>
 
                 <div class="col-lg-4">

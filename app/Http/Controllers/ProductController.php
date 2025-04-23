@@ -36,18 +36,21 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->regular_price);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'short_description' => 'required|string|max:255',
             'description' => 'required',
             'regular_price' => 'required|numeric',
-            'discount' => 'nullable|numeric|min:0|max:regular_price',
+            'discount' => 'nullable|numeric|min:0',
             'SKU' => 'required|string|max:100|unique:products',
             'stock_status' => 'required|in:instock,outofstock',
             'quantity' => 'required|integer|min:0',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'category_id' => 'required|exists:categories,id',
         ]);
+
 
         // Handle primary image upload
         $imageName = time() . '.' . $request->image->extension();

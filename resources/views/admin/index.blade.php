@@ -4,12 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surfside Media - Admin Dashboard</title>
+    <title> Admin Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('assets/css/dashboard.css') }}">
 
 </head>
+<style>
+    
+</style>
 
 <body>
     <div class="wrapper">
@@ -17,7 +20,7 @@
         <div class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <div class="logo-text">SURFSIDE MEDIA</div>
+                    <div class="logo-text">Admin Dashboard</div>
                 </div>
                 <div class="colored-dots">
                     <div class="dot dot-1"></div>
@@ -87,7 +90,7 @@
                 </ul>
 
                 <div class="menu-header">CONTENT</div>
-                <ul>
+                <!-- <ul>
                     <li class="menu-item">
                         <i class="fas fa-home"></i>
                         <span>Home Banner</span>
@@ -100,10 +103,10 @@
                         <i class="fas fa-file-alt"></i>
                         <span>Pages</span>
                     </li>
-                </ul>
+                </ul> -->
 
                 <div class="menu-header">USERS</div>
-                <ul>
+                <!-- <ul>
                     <li class="menu-item">
                         <i class="fas fa-users"></i>
                         <span>Customers</span>
@@ -116,10 +119,10 @@
                         <i class="fas fa-user-cog"></i>
                         <span>Roles & Permissions</span>
                     </li>
-                </ul>
+                </ul> -->
 
                 <div class="menu-header">SETTINGS</div>
-                <ul>
+                <!-- <ul>
                     <li class="menu-item">
                         <i class="fas fa-store"></i>
                         <span>Store Settings</span>
@@ -132,7 +135,7 @@
                         <i class="fas fa-cog"></i>
                         <span>General Settings</span>
                     </li>
-                </ul>
+                </ul> -->
             </div>
         </div>
 
@@ -157,12 +160,32 @@
                         <i class="fas fa-envelope"></i>
                         <span class="badge">5</span>
                     </div>
-                    <div class="user-profile">
-                        <div class="user-avatar">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <span>Admin</span>
-                    </div>
+                    @auth
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-user me-1"></i> {{ Auth::user()->name }}
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+        @if(Auth::user()->is_admin)
+            <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</a></li>
+        @endif
+        <li><a class="dropdown-item" href="{{ route('profile.index') }}"><i class="fas fa-user-circle me-2"></i>My Profile</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="dropdown-item">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </button>
+            </form>
+        </li>
+    </ul>
+</li>
+@else
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('login') }}"><i class="fas fa-sign-in-alt me-1"></i> SIGN IN</a>
+</li>
+@endauth
                 </div>
             </div>
 

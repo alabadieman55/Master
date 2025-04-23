@@ -1,5 +1,264 @@
 @extends('layouts.app')
+<style>
 
+
+
+    /* Orange Theme CSS for Product Form */
+
+/* Global Variables */
+:root {
+  --orange-primary: #FF7A00;
+  --orange-light: #FFB266;
+  --orange-dark: #CC6100;
+  --orange-pale: #FFF0E5;
+  --text-dark: #333333;
+  --text-light: #FFFFFF;
+  --border-color: #E0E0E0;
+  --success-color: #28a745;
+  --error-color: #dc3545;
+  --bg-light: #F9F9F9;
+}
+
+/* Main Layout Styling */
+.dashboard-content {
+  background-color: var(--bg-light);
+  padding: 20px;
+}
+
+.card {
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border: none;
+  margin-bottom: 25px;
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: var(--orange-primary);
+  color: var(--text-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: none;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.card-body {
+  padding: 25px;
+  background-color: #FFFFFF;
+}
+
+/* Page Header */
+.page-header {
+  margin-bottom: 25px;
+}
+
+.page-title {
+  color: var(--orange-dark);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  background-color: transparent;
+  padding: 0;
+  margin-bottom: 0;
+  display: flex;
+  list-style: none;
+}
+
+.breadcrumb li {
+  display: inline-block;
+  font-size: 14px;
+  color: var(--text-dark);
+}
+
+.breadcrumb li:not(:last-child)::after {
+  content: "/";
+  margin: 0 8px;
+  color: #999;
+}
+
+.breadcrumb li:last-child {
+  color: var(--orange-primary);
+  font-weight: 500;
+}
+
+/* Form Elements */
+.form-label {
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 5px;
+}
+
+.form-control {
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 10px 12px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: var(--orange-primary);
+  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.15);
+}
+
+textarea.form-control {
+  min-height: 150px;
+}
+
+.input-group-text {
+  background-color: var(--orange-light);
+  color: var(--text-light);
+  border: 1px solid var(--orange-light);
+}
+
+.text-danger {
+  color: var(--error-color) !important;
+}
+
+.text-muted {
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* Select Styling */
+select.form-control {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF7A00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding-right: 30px;
+}
+
+/* Validation Styling */
+.is-invalid {
+  border-color: var(--error-color);
+}
+
+.invalid-feedback {
+  color: var(--error-color);
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* Checkbox Styling */
+.form-check-input {
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: var(--orange-primary);
+  border-color: var(--orange-primary);
+}
+
+.form-check-label {
+  cursor: pointer;
+  user-select: none;
+}
+
+/* File Upload Styling */
+input[type="file"].form-control {
+  padding: 8px;
+}
+
+/* Button Styling */
+.btn {
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.btn i {
+  margin-right: 8px;
+}
+
+.btn-primary {
+  background-color: var(--orange-primary);
+  border-color: var(--orange-primary);
+  color: var(--text-light);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--orange-dark);
+  border-color: var(--orange-dark);
+  box-shadow: 0 4px 10px rgba(255, 122, 0, 0.25);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border-color: var(--orange-primary);
+  color: var(--orange-primary);
+}
+
+.btn-secondary:hover, .btn-secondary:focus {
+  background-color: var(--orange-pale);
+  color: var(--orange-dark);
+}
+
+/* Section Separators */
+.row + .row {
+  margin-top: 15px;
+}
+
+.mt-4 {
+  margin-top: 20px !important;
+}
+
+/* Editor Styling (for WYSIWYG) */
+.ck-editor__editable {
+  min-height: 200px !important;
+}
+
+.ck.ck-editor__editable:focus {
+  border-color: var(--orange-primary) !important;
+}
+
+.ck.ck-toolbar {
+  border-color: var(--border-color) !important;
+}
+
+.ck.ck-button.ck-on {
+  background-color: var(--orange-pale) !important;
+  color: var(--orange-dark) !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .card-header a {
+    margin-top: 15px;
+  }
+  
+  .row {
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  
+  .col-md-4, .col-md-6, .col-md-8 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+</style>
 @section('content')
     <div class="dashboard-content">
         <div class="page-header">
@@ -14,7 +273,7 @@
         <div class="card">
             <div class="card-header">
                 <h3>Product Information</h3>
-                <a href="{{ route('products.index') }}" class="btn btn-secondary">
+                <a href="{{ route('products.index') }}" class="btn btn-">
                     <i class="fas fa-arrow-left"></i> Back to Products
                 </a>
             </div>
@@ -185,7 +444,7 @@
                     </div>
 
                     <div class="form-group mt-4">
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn primary">
                             <i class="fas fa-save"></i> Save Product
                         </button>
                     </div>

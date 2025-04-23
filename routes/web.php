@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContactusController;
+use App\Http\Controllers\ProfileController;
 
 
 /*
@@ -33,6 +35,8 @@ Route::post('/cart/store', [CartController::class, 'addToCart'])->name('cart.sto
 Route::put('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
 Route::delete('/cart/remove', [CartController::class, 'removeItem'])->name('cart.remove');
 Route::delete('/cart/clear', [CartController::class, 'clearCart'])->name('cart.clear');
+Route::post('/move-to-cart', [CartController::class, 'moveToCart'])->name('moveToCart');
+
 
 Route::post('/wishlist/add', [WishlistController::class, 'addproductToWishlist'])->name('wishlist.store');
 Route::get('/wishlist', [WishlistController::class, 'getWishlistedproducts'])->name('wishlist.list');
@@ -46,6 +50,7 @@ Route::post('/checkout/create-payment-intent', [App\Http\Controllers\CheckoutCon
 Route::get('/checkout/success', [App\Http\Controllers\CheckoutController::class, 'processPayment'])->name('checkout.success');
 Route::post('/checkout/place-order', [App\Http\Controllers\CheckoutController::class, 'processPayment'])->name('checkout.place-order');
 Route::get('/order/confirmation/{order_id}', [App\Http\Controllers\OrderController::class, 'confirmation'])->name('order.confirmation');
+Route::post('/checkout/stripe', [CartController::class, 'createStripeSession'])->name('checkout.stripe');
 
 
 Route::get('/conf', function () {
@@ -65,8 +70,22 @@ Route::middleware(['auth', 'auth.admin'])->group(function () {
     // Delete product image
     Route::delete('products/{product}/images', [ProductController::class, 'deleteImage'])->name('products.delete-image');
     Route::resource('categories', CategoryController::class);
+
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });
 
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/aboutus',function(){
+return view('aboutus');
+
+});
+ Route::get('/contactus',[ContactusController::class,'showForm'])->name('contact');
+ Route::post('/contactus',[ContactusController::class,'submitForm'])->name('contact.submit');
+
+ Route::get('/admin/contacts/{contact}', [ContactUsController::class, 'show'])
+ ->name('admin.contact.show');

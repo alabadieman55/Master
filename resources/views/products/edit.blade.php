@@ -14,7 +14,7 @@
         <div class="card">
             <div class="card-header">
                 <h3>Product Information</h3>
-                <a href="{{ route('products.index') }}" class="btn btn-secondary">
+                <a href="{{ route('products.index') }}" class="btn btn-">
                     <i class="fas fa-arrow-left"></i> Back to Products
                 </a>
             </div>

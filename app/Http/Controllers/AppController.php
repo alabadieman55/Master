@@ -13,6 +13,9 @@ class AppController extends Controller
 
         $categories = Category::all();
         $productsDiscount = Product::where('discount', '>', 0)->get();
-        return view('index', compact('categories', 'productsDiscount'));
+        $packages = Product::whereHas('category',function($query){
+            $query->where('name','Packages');
+        })->get();
+        return view('index', compact('categories', 'productsDiscount','packages'));
     }
 }
