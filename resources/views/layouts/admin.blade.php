@@ -54,7 +54,7 @@
         <div class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <div class="logo-text">SURFSIDE MEDIA</div>
+                    <div class="logo-text">Admin Dashboard</div>
                 </div>
                 <div class="colored-dots">
                     <div class="dot dot-1"></div>
@@ -67,12 +67,13 @@
             <div class="sidebar-menu">
                 <div class="menu-header">DASHBOARD</div>
                 <ul>
-                    <li class="menu-item">
-                        <a href="{{ route('dashboard') }}">
-                            <i style="color: white" class="fas fa-tachometer-alt"></i>
-                            <span style="color: white">Dashboard</span>
+                    <li class="menu-item active">
 
+                        <a href="/admin" style="text-decoration: none;color:white">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
                         </a>
+
                     </li>
                     <li class="menu-item">
                         <i class="fas fa-chart-bar"></i>
@@ -81,22 +82,101 @@
                 </ul>
 
                 <div class="menu-header">CATALOG</div>
-                <ul>
-                    <li class="menu-item {{ request()->is('admin/products*') ? 'active' : '' }}">
-                        <a href="{{ route('products.index') }}" style="text-decoration: none; color: inherit;">
-                            <i class="fas fa-tshirt"></i>
-                            <span>Products</span>
-                        </a>
+                <a href="/products" style="text-decoration: none;">
+                    <ul>
+                        <li class="menu-item">
+                            <i class="fas fa-tshirt" style="color: white"></i>
+                            <span style="color: white">Products</span>
+                        </li>
+                </a>
+
+
+                <a href="/categories" style="text-decoration: none;">
+
+                    <li class="menu-item">
+                        <i class="fas fa-tags" style="color: white"></i>
+                        <span style="color: white">Categories</span>
                     </li>
-                    <li class="menu-item {{ request()->is('admin/categories*') ? 'active' : '' }}">
-                        <a href="/categories" style="text-decoration: none; color: inherit;">
-                            <i class="fas fa-tags"></i>
-                            <span>Categories</span>
+                </a>
+
+
+
+                <li class="menu-item">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Collections</span>
+                </li>
+                <li class="menu-item">
+                    <i class="fas fa-percentage"></i>
+                    <span>Discounts</span>
+                </li>
+                </ul>
+
+                <div class="menu-header">SALES</div>
+                <ul>
+                    <li class="menu-item">
+                        <a href="/orders" style="text-decoration: none;color:white">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Orders</span>
                         </a>
+
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Returns</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-truck"></i>
+                        <span>Shipping</span>
                     </li>
                 </ul>
 
-                <!-- Other menu sections remain the same -->
+                <div class="menu-header">CONTENT</div>
+                <!-- <ul>
+                    <li class="menu-item">
+                        <i class="fas fa-home"></i>
+                        <span>Home Banner</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-blog"></i>
+                        <span>Blog Posts</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Pages</span>
+                    </li>
+                </ul> -->
+
+                <div class="menu-header">USERS</div>
+                <!-- <ul>
+                    <li class="menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Customers</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Admin Users</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Roles & Permissions</span>
+                    </li>
+                </ul> -->
+
+                <div class="menu-header">SETTINGS</div>
+                <!-- <ul>
+                    <li class="menu-item">
+                        <i class="fas fa-store"></i>
+                        <span>Store Settings</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Payment Methods</span>
+                    </li>
+                    <li class="menu-item">
+                        <i class="fas fa-cog"></i>
+                        <span>General Settings</span>
+                    </li>
+                </ul> -->
             </div>
         </div>
 

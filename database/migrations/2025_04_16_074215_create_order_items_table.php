@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('product_id')->unsigned();
             $table->bigInteger('order_id')->unsigned();
-            $table->decimal('price');
+            $table->decimal('price',10,2);
             $table->integer('quantity');
-            $table->longText('options')->nullable();
+            $table->json('options')->nullable();
             $table->boolean('rstatus')->default(false);
             $table->timestamps();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');

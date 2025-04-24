@@ -8,12 +8,39 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'subtotal',
+        'discount',
+        'tax',
+        'total',
+        'name',
+        'email',
+        'phone',
+        'address',
+        'city',
+        'state',
+        'country',
+        'landmark',
+        'zip',
+        'type',
+        'status',
+        'payment_method',
+        'payment_status',
+        'transaction_id',
+        'is_shipping_different',
+        'delivered_date',
+        'canceled_date',
+        'notes'
+
+    ];
     public function user()
     {
         return $this->belongsTo(user::class);
     }
 
-    public function orderItems()
+    public function items()
     {
         return $this->hasMany(OrderItem::class);
     }

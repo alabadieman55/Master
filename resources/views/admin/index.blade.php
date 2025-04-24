@@ -11,7 +11,7 @@
 
 </head>
 <style>
-    
+
 </style>
 
 <body>
@@ -76,8 +76,11 @@
                 <div class="menu-header">SALES</div>
                 <ul>
                     <li class="menu-item">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Orders</span>
+                        <a href="/orders" style="text-decoration: none;color:white">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Orders</span>
+                        </a>
+
                     </li>
                     <li class="menu-item">
                         <i class="fas fa-exchange-alt"></i>
@@ -161,31 +164,37 @@
                         <span class="badge">5</span>
                     </div>
                     @auth
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fas fa-user me-1"></i> {{ Auth::user()->name }}
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-        @if(Auth::user()->is_admin)
-            <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</a></li>
-        @endif
-        <li><a class="dropdown-item" href="{{ route('profile.index') }}"><i class="fas fa-user-circle me-2"></i>My Profile</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="dropdown-item">
-                    <i class="fas fa-sign-out-alt me-2"></i> Logout
-                </button>
-            </form>
-        </li>
-    </ul>
-</li>
-@else
-<li class="nav-item">
-    <a class="nav-link" href="{{ route('login') }}"><i class="fas fa-sign-in-alt me-1"></i> SIGN IN</a>
-</li>
-@endauth
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-1"></i> {{ Auth::user()->name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                @if (Auth::user()->is_admin)
+                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i
+                                                class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</a></li>
+                                @endif
+                                <li><a class="dropdown-item" href="{{ route('profile.index') }}"><i
+                                            class="fas fa-user-circle me-2"></i>My Profile</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}"><i class="fas fa-sign-in-alt me-1"></i> SIGN
+                                IN</a>
+                        </li>
+                    @endauth
                 </div>
             </div>
 
@@ -214,7 +223,7 @@
                             <i class="fas fa-dollar-sign"></i>
                         </div>
                         <div class="stat-details">
-                            <h3>$42,562</h3>
+                            <h3>${{ $revenue }}</h3>
                             <p>Total Revenue</p>
                         </div>
                     </div>
@@ -244,7 +253,8 @@
                     <div class="card recent-orders">
                         <div class="card-header">
                             <h3>Recent Orders</h3>
-                            <span class="card-header-action">View All</span>
+                            <a href="/orders" class="card-header-action">View All</a>
+                            {{-- <span class="card-header-action">View All</span> --}}
                         </div>
                         <table>
                             <thead>
@@ -257,41 +267,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>#ORD-5289</td>
-                                    <td>Jane Smith</td>
-                                    <td>18 Apr, 2025</td>
-                                    <td>$129.99</td>
-                                    <td><span class="status status-delivered">Delivered</span></td>
-                                </tr>
-                                <tr>
-                                    <td>#ORD-5288</td>
-                                    <td>Mike Johnson</td>
-                                    <td>17 Apr, 2025</td>
-                                    <td>$79.00</td>
-                                    <td><span class="status status-pending">Pending</span></td>
-                                </tr>
-                                <tr>
-                                    <td>#ORD-5287</td>
-                                    <td>Alex Williams</td>
-                                    <td>17 Apr, 2025</td>
-                                    <td>$158.00</td>
-                                    <td><span class="status status-delivered">Delivered</span></td>
-                                </tr>
-                                <tr>
-                                    <td>#ORD-5286</td>
-                                    <td>Sarah Davis</td>
-                                    <td>16 Apr, 2025</td>
-                                    <td>$65.00</td>
-                                    <td><span class="status status-failed">Failed</span></td>
-                                </tr>
-                                <tr>
-                                    <td>#ORD-5285</td>
-                                    <td>John Brown</td>
-                                    <td>16 Apr, 2025</td>
-                                    <td>$198.50</td>
-                                    <td><span class="status status-delivered">Delivered</span></td>
-                                </tr>
+                                @foreach ($ordersMain as $orderMain)
+                                    <tr>
+                                        <td>#ORD-{{ $orderMain->id }}</td>
+                                        <td>{{ $orderMain->name }}</td>
+                                        <td>{{ $orderMain->created_at }}</td>
+                                        <td>${{ $orderMain->total }}</td>
+                                        <td><span class="status status-delivered">Delivered</span></td>
+                                    </tr>
+                                @endforeach
+
+
                             </tbody>
                         </table>
                     </div>
@@ -299,8 +285,8 @@
                     <div class="card">
                         <div class="card-header">
                             <h3>Top Selling Products</h3>
-                            <span class="card-header-action">View All</span>
                         </div>
+
                         <div class="top-products">
                             <div class="product-item">
                                 <img src="/api/placeholder/50/50" alt="Green Dress" class="product-image">

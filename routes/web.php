@@ -12,6 +12,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactusController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StripeController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\AdminOrderController;
 
 
 /*
@@ -30,27 +33,46 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/Product/{slug}', [ShopController::class, 'productDetails'])->name('shop.product.details');
 Route::get('/cart-wishlist-count', [ShopController::class, 'getCartAndWishlistCount'])->name('shop.cart.wishlist.count');
 
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/store', [CartController::class, 'addToCart'])->name('cart.store');
-Route::put('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
-Route::delete('/cart/remove', [CartController::class, 'removeItem'])->name('cart.remove');
-Route::delete('/cart/clear', [CartController::class, 'clearCart'])->name('cart.clear');
+Route::get('/cart', [CartController::class, 'showCart'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::put('/cart/{id}', [CartController::class, 'updateCart'])->name('cart.update');
+Route::delete('/cart/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::delete('/cart', [CartController::class, 'clearCart'])->name('cart.clear');
 Route::post('/move-to-cart', [CartController::class, 'moveToCart'])->name('moveToCart');
+Route::get('/checkout/success', [CartController::class, 'checkoutSuccess'])->name('checkout.success');
+Route::get('/checkout/cancel', [CartController::class, 'checkoutCancel'])->name('checkout.cancel');
+// Stripe routes
+Route::post('/checkout/stripe', [StripeController::class, 'createStripeSession'])->name('checkout.stripe');
+Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.place-order');
+
+Route::get('/checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
+Route::post('/create-checkout-session/{package}', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
+Route::post('/checkout/create-payment-intent', [StripeController::class, 'createPaymentIntent'])->name('checkout.create-payment-intent');
+
+// // Existing routes
+// Route::get('/stripe/{id}', [StripeController::class, 'stripe'])->name('stripe');
+// Route::post('/stripe/post', [StripeController::class, 'stripePost'])->name('stripe.post');
+
+Route::post('/wishlist/add', [WishlistController::class, 'addToWishlist'])
+    ->name('wishlist.store');
+// If you want it to be auth-only
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.list');
+Route::get('/wishlist/count', [WishlistController::class, 'count']);
+Route::post('/wishlist/check', [WishlistController::class, 'check']);
+
+Route::delete('/wishlist/{productId}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+Route::delete('/wishlist/clear', [WishlistController::class, 'clearWishlist'])->name('wishlist.clear');
+Route::post('/wishlist/{productId}/move-to-cart', [WishlistController::class, 'moveToCart'])->name('wishlist.moveToCart');
 
 
-Route::post('/wishlist/add', [WishlistController::class, 'addproductToWishlist'])->name('wishlist.store');
-Route::get('/wishlist', [WishlistController::class, 'getWishlistedproducts'])->name('wishlist.list');
-Route::delete('/wishlist/remove', [WishlistController::class, 'removeproductFromWishlist'])->name('wishlist.remove');
-Route::delete('/wishlist/clear', [WishlistController::class, 'clrarWishlist'])->name('wishlist.clear');
-Route::post('/wishlist/move-to-cart', [WishlistController::class, 'moveToCart'])->name('wishlist.move.to.cart');
-
+Route::post('/wishlist/toggle', [WishlistController::class, 'toggle']);
 // Checkout Routes
-Route::get('/checkout', [App\Http\Controllers\CheckoutController::class, 'checkout'])->name('checkout');
-Route::post('/checkout/create-payment-intent', [App\Http\Controllers\CheckoutController::class, 'createPaymentIntent'])->name('checkout.create-payment-intent');
-Route::get('/checkout/success', [App\Http\Controllers\CheckoutController::class, 'processPayment'])->name('checkout.success');
-Route::post('/checkout/place-order', [App\Http\Controllers\CheckoutController::class, 'processPayment'])->name('checkout.place-order');
-Route::get('/order/confirmation/{order_id}', [App\Http\Controllers\OrderController::class, 'confirmation'])->name('order.confirmation');
+Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
 Route::post('/checkout/stripe', [CartController::class, 'createStripeSession'])->name('checkout.stripe');
+Route::get('/checkout/success', [CartController::class, 'checkoutSuccess'])->name('checkout.success');
+Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.place-order');
+Route::get('/order/confirmation/{order_id}', [App\Http\Controllers\OrderController::class, 'confirmation'])->name('order.confirmation');
 
 
 Route::get('/conf', function () {
@@ -74,18 +96,24 @@ Route::middleware(['auth', 'auth.admin'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+
+    Route::get('/orders', [AdminOrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('admin.orders.show');
+    Route::get('/orders/{order}/edit', [AdminOrderController::class, 'edit'])->name('admin.orders.edit');
+    Route::put('/orders/{order}', [AdminOrderController::class, 'update'])->name('admin.orders.update');
+    Route::delete('/orders/{order}', [AdminOrderController::class, 'destroy'])->name('admin.orders.destroy');
 });
 
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/aboutus',function(){
-return view('aboutus');
-
+Route::get('/aboutus', function () {
+    return view('aboutus');
 });
- Route::get('/contactus',[ContactusController::class,'showForm'])->name('contact');
- Route::post('/contactus',[ContactusController::class,'submitForm'])->name('contact.submit');
+Route::get('/contactus', [ContactusController::class, 'showForm'])->name('contact');
+Route::post('/contactus', [ContactusController::class, 'submitForm'])->name('contact.submit');
 
- Route::get('/admin/contacts/{contact}', [ContactUsController::class, 'show'])
- ->name('admin.contact.show');
+Route::get('/admin/contacts/{contact}', [ContactUsController::class, 'show'])
+    ->name('admin.contact.show');

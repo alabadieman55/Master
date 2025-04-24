@@ -39,4 +39,10 @@ class Product extends Model
             ->withPivot('quantity', 'unit_price')
             ->withTimestamps();
     }
+
+    public function wishlistedBy()
+    {
+        return $this->belongsToMany(User::class, 'wishlists')
+            ->withTimestamps();
+    }
 }

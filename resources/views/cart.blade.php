@@ -53,34 +53,15 @@
                                 @foreach ($cartItems as $item)
                                     <tr>
                                         <td>
-                                            <a href="{{ route('shop.product.details', ['slug' => $item->model->slug]) }}">
-                                                <img src="{{ asset('storage/products/' . $item->model->image) }}"
-                                                    class="blur-up lazyloaded" alt="{{ $item->model->name }}">
+                                            <a href="{{ route('shop.product.details', ['slug' => $item->product->slug]) }}">
+                                                <img src="{{ asset('storage/products/' . $item->product->image) }}"
+                                                    class="blur-up lazyloaded" alt="{{ $item->product->name }}">
                                             </a>
                                         </td>
                                         <td>
-                                            <a
-                                                href="{{ route('shop.product.details', ['slug' => $item->model->slug]) }}">{{ $item->model->name }}</a>
-                                            <div class="mobile-cart-content row">
-                                                <div class="col">
-                                                    <div class="qty-box">
-                                                        <div class="input-group">
-                                                            <input type="text" name="quantity"
-                                                                class="form-control input-number" value="1">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <h2>${{ $item->price }}</h2>
-                                                </div>
-                                                <div class="col">
-                                                    <h2 class="td-color">
-                                                        <a href="javascript:void(0)">
-                                                            <i class="fas fa-times"></i>
-                                                        </a>
-                                                    </h2>
-                                                </div>
-                                            </div>
+                                            <a href="{{ route('shop.product.details', ['slug' => $item->product->slug]) }}">
+                                                {{ $item->product->name }}
+                                            </a>
                                         </td>
                                         <td>
                                             <h2>${{ $item->price }}</h2>
@@ -88,21 +69,17 @@
                                         <td>
                                             <div class="qty-box">
                                                 <div class="input-group">
-                                                    <input type="number" name="quantity" data-rowid="{{ $item->rowId }}"
-                                                        onchange=" updatequantity(this) " class="form-control input-number"
-                                                        value="{{ $item->qty }}">
-
-
-
+                                                    <input type="number" name="quantity" data-id="{{ $item->id }}"
+                                                        onchange="updatequantity(this)" class="form-control input-number"
+                                                        value="{{ $item->quantity }}" min="1">
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <h2 class="td-color">${{ $item->subtotal() }}</h2>
+                                            <h2 class="td-color">${{ number_format($cartTotal, 2) }}</h2>
                                         </td>
                                         <td>
-                                            <a href="javascript:void(0)"
-                                                onclick="removeItemFromCart('{{ $item->rowId }}')">
+                                            <a href="javascript:void(0)" onclick="removeCartItem('{{ $item->id }}')">
                                                 <i class="fas fa-times"></i>
                                             </a>
                                         </td>
@@ -160,9 +137,14 @@
                                         <div class="total-details">
                                             <div class="top-details">
                                                 <h3>Cart Totals</h3>
-                                                <h6>Sub Total <span>{{ Cart::instance('cart')->subtotal() }}JOD</span></h6>
-                                                <h6>Tax <span>{{ Cart::instance('cart')->tax() }}JOD</span></h6>
-                                                <h6>Total <span>{{ Cart::instance('cart')->total() }}JOD</span></h6>
+                                                <h6>Sub Total <span>{{ number_format($cartTotal, 2) }}JOD</span></h6>
+                                                @php
+                                                    $taxRate = 0.16; // 16% tax
+                                                    $tax = $cartTotal * $taxRate;
+                                                    $total = $cartTotal + $tax;
+                                                @endphp
+                                                <h6>Tax (16%) <span>{{ number_format($tax, 2) }}JOD</span></h6>
+                                                <h6>Total <span>{{ number_format($total, 2) }}JOD</span></h6>
 
                                             </div>
                                             <div class="bottom-details">
@@ -183,41 +165,111 @@
             @endif
         </div>
     </section>
-    <form id="updateCartQty" action="{{ route('cart.update') }}" method="POST">
+    <form id="updateCartQty" action="{{ route('cart.update', ['id' => '__ID__']) }}" method="POST">
         @csrf
-        @method('put')
-        <input type="hidden" name="rowId" id="rowId" />
+        @method('PUT')
+        <input type="hidden" name="id" id="cartItemId" />
         <input type="hidden" name="quantity" id="quantity" />
     </form>
-    <form id="deleteFromCart" action="{{ route('cart.remove') }}" method="POST">
+
+    <form id="deleteFromCart" action="{{ route('cart.remove', ['id' => '__ID__']) }}" method="POST">
         @csrf
-        @method('delete')
-        <input type="hidden" name="rowId" id="rowId_D" />
+        @method('DELETE')
+        <input type="hidden" name="id" id="cartItemId_D" />
     </form>
 
 
     <form id="clearCart" action="{{ route('cart.clear') }}" method="POST">
         @csrf
-        @method('delete')
+        @method('DELETE')
     </form>
 
 
 @endsection
 @push('scripts')
     <script>
-        function updatequantity(qty) {
-            $('#rowId').val($(qty).data('rowid'));
-            $('#quantity').val($(qty).val());
-            $('#updateCartQty').submit();
+        function updatequantity(element) {
+            // Get the item ID from the data-id attribute
+            const id = element.getAttribute('data-id');
+            // Get the new quantity value
+            const quantity = element.value;
+
+            // Call the function to update the cart
+            updateCartQuantity(id, quantity);
         }
 
-        function removeItemFromCart(rowId) {
-            $('#rowId_D').val(rowId);
-            $('#deleteFromCart').submit();
+
+
+        function updateCartQuantity(id, quantity) {
+            // Set the form values
+            document.getElementById('cartItemId').value = id;
+            document.getElementById('quantity').value = quantity;
+
+            // Get the form element
+            const form = document.getElementById('updateCartQty');
+
+            // Replace the placeholder in the action URL
+            form.action = form.action.replace('__ID__', id);
+
+            // Submit the form via AJAX
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update cart count in UI if needed
+                        if (document.querySelector('.cart-count')) {
+                            document.querySelector('.cart-count').textContent = data.cartCount;
+                        }
+
+                        // Reload the page to reflect the updated cart totals
+                        window.location.reload();
+                    }
+                })
+                .catch(error => console.error('Error updating cart:', error));
+        }
+
+        function removeCartItem(id) {
+            // Set the form value
+            document.getElementById('cartItemId_D').value = id;
+
+            // Get the form element
+            const form = document.getElementById('deleteFromCart');
+
+            // Replace the placeholder in the action URL
+            form.action = form.action.replace('__ID__', id);
+
+            // Submit the form via AJAX
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Reload the page to show updated cart
+                        window.location.reload();
+                    }
+                })
+                .catch(error => console.error('Error removing item from cart:', error));
         }
 
         function clearCart() {
-            $('#clearCart').submit();
+            if (confirm('Are you sure you want to clear your entire cart?')) {
+                document.getElementById('clearCart').submit();
+            }
         }
     </script>
 @endpush

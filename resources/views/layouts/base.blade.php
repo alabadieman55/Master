@@ -4,11 +4,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="MkRqEzTGuoSx6LqJUm0OAKxSgNUYt26wTT7RMUZY">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon.ico') }}">
     <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
     <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+    <!-- JS (add before your closing </body> tag) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <meta name="theme-color" content="#e87316">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -163,17 +168,16 @@
                                             <a href="{{ route('wishlist.list') }}">
                                                 <i data-feather="heart"></i>
                                                 <span id="wishlist-count" class="label label-theme rounded-pill">
-                                                    {{ Cart::instance('wishlist')->count() }}
+
                                                 </span>
                                             </a>
-                                        </div>
                                     </li>
                                     <li class="onhover-dropdown wishlist-dropdown">
                                         <div class="cart-media">
                                             <a href="{{ route('cart.index') }}">
                                                 <i data-feather="shopping-cart"></i>
                                                 <span id="cart-count" class="label label-theme rounded-pill">
-                                                    {{ Cart::instance('cart')->content()->count() }}
+                                                    {{ App\Models\Cart::where('session_id', Session::getId())->sum('quantity') }}
                                                 </span>
                                             </a>
                                         </div>
@@ -190,8 +194,7 @@
                                                         @auth
                                                             @if (Auth::user()->Utype === 'ADM')
                                                                 <li>
-                                                                    <a href="/admin"
-                                                                        class="d-block">Dashboard</a>
+                                                                    <a href="/admin" class="d-block">Dashboard</a>
 
                                                                 </li>
                                                             @else
@@ -302,7 +305,7 @@
                                 <li>
                                     <span><b>phone:</b> <span class="font-light"> +96277608920</span></span>
                                 </li>
-                               
+
                                 <li>
                                     <span><b>Email:</b><span class="font-light"> alabadieman58@gmail.com</span></span>
                                 </li>
@@ -325,7 +328,7 @@
                                     <li>
                                         <a href="about-us.html" class="font-dark">About Us</a>
                                     </li>
-                                  
+
                                     <li>
                                         <a href="contact-us.html" class="font-dark">Contact</a>
                                     </li>
@@ -333,11 +336,11 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                         <div class="footer-links">
-                          
-                           
+
+
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-4 col-sm-6 d-none d-sm-block">
@@ -583,11 +586,40 @@
     <script src="{{ asset('assets/js/bootstrap/bootstrap-notify.min.js') }}"></script>
     <script src="{{ asset('assets/js/theme-setting.js') }}"></script>
     <script src="{{ asset('assets/js/script.js') }}"></script>
+    <script src="{{ asset('assets/js/wishlist.js') }}"></script>
+    <script src="{{ asset('assets/js/addToCart.js') }}"></script>
+
+
     <script>
         $(function() {
             $('[data-bs-toggle="tooltip"]').tooltip()
         });
-        
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get all "Add to Cart" buttons
+            const addToCartButtons = document.querySelectorAll(".add-card");
+
+            // Add click event listeners to all "Add to Cart" buttons
+            addToCartButtons.forEach((button) => {
+                button.addEventListener("click", function(e) {
+                    e.preventDefault();
+
+                    // Get product ID from data attribute
+                    const productId = this.getAttribute("data-product-id");
+
+                    // Call the addToCart function
+                    addToCart(productId, 1); // Assuming quantity of 1
+                });
+            });
+        });
+
+        // Function to update the cart counter display
+        function updateCartCounter(count) {
+            const cartCounter = document.querySelector(".cart-counter");
+            if (cartCounter) {
+                cartCounter.textContent = count;
+            }
+        }
     </script>
     @stack('scripts')
 </body>

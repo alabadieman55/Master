@@ -20,7 +20,7 @@
                     <nav>
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="/">
+                                <a href="{{ route('app.index') }}">
                                     <i class="fas fa-home"></i>
                                 </a>
                             </li>
@@ -31,119 +31,101 @@
             </div>
         </div>
     </section>
-    <!-- Cart Section Start -->
+
+    <!-- Checkout Section Start -->
     <section class="section-b-space">
         <div class="container">
+            @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <div class="row g-4">
                 <div class="col-lg-8">
-                    <form id="payment-form" class="needs-validation">
+                    <form action="{{ route('checkout.stripe') }}" id="payment-form" method="POST">
                         @csrf
-                        <div id="billingAddress" class="row g-4">
-                            <h3 class="mb-3 theme-color">Billing address</h3>
+
+                        <!-- Add billing address fields -->
+                        <div class="row mb-4">
                             <div class="col-md-6">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="name" name="name"
-                                    placeholder="Enter Full Name" required>
+                                <label for="name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
                             </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
                             <div class="col-md-6">
                                 <label for="phone" class="form-label">Phone</label>
-                                <input type="text" class="form-control" id="phone" name="phone"
-                                    placeholder="Enter Phone Number" required>
+                                <input type="text" class="form-control" id="phone" name="phone" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="locality" class="form-label">Locality</label>
-                                <input type="text" class="form-control" id="locality" name="locality"
-                                    placeholder="Locality">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="landmark" class="form-label">Landmark</label>
-                                <input type="text" class="form-control" id="landmark" name="landmark"
-                                    placeholder="Landmark">
-                            </div>
-
-                            <div class="col-md-12">
                                 <label for="address" class="form-label">Address</label>
-                                <textarea class="form-control" id="address" name="address" required></textarea>
+                                <input type="text" class="form-control" id="address" name="address" required>
                             </div>
+                        </div>
 
-                            <div class="col-md-3">
+                        <div class="row mb-4">
+                            <div class="col-md-4">
                                 <label for="city" class="form-label">City</label>
-                                <input type="text" class="form-control" id="city" name="city" placeholder="City"
-                                    required>
+                                <input type="text" class="form-control" id="city" name="city" required>
                             </div>
-
-                            <div class="col-md-3">
-                                <label for="country" class="form-label">Country</label>
-                                <select class="form-select custome-form-select" id="country" name="country" required>
-                                    <option>India</option>
-                                </select>
+                            <div class="col-md-4">
+                                <label for="state" class="form-label">State/Region</label>
+                                <input type="text" class="form-control" id="state" name="state" required>
                             </div>
-                            <div class="col-md-3">
-                                <label for="state" class="form-label">State</label>
-                                <select class="form-select custome-form-select" id="state" name="state" required>
-                                    <option selected="" disabled="" value="">Choose...</option>
-                                    <option value="Andhra Pradesh">Andhra Pradesh</option>
-                                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                                    <!-- Other states... -->
-                                    <option value="West Bengal">West Bengal</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="zip" class="form-label">Zip</label>
-                                <input type="text" class="form-control" id="zip" name="zip"
-                                    placeholder="123456" required>
-                            </div>
-
-                            <div class="col-md-12 form-check ps-0 mt-3 custome-form-check"
-                                style="padding-left:15px !important;">
-                                <input class="checkbox_animated check-it" type="checkbox" name="sameAsBilling"
-                                    id="sameAsBilling">
-                                <label class="form-check-label checkout-label" for="sameAsBilling">Shipping address is
-                                    same as Billing Address</label>
+                            <div class="col-md-4">
+                                <label for="zip" class="form-label">ZIP Code</label>
+                                <input type="text" class="form-control" id="zip" name="zip" required>
                             </div>
                         </div>
 
-                        <div id="shippingAddress" class="row g-4 mt-5">
-                            <h3 class="mb-3 theme-color">Shipping address</h3>
-                            <!-- Shipping address fields (same structure as billing) -->
-                            <!-- These fields should be hidden/shown based on the sameAsBilling checkbox -->
+                        <div class="mb-4">
+                            <label for="country" class="form-label">Country</label>
+                            <select class="form-control" id="country" name="country" required>
+                                <option value="Jordan">Jordan</option>
+                                <!-- Add other countries as needed -->
+                            </select>
                         </div>
 
-                        <div class="form-check ps-0 mt-3 custome-form-check">
-                            <input class="checkbox_animated check-it" type="checkbox" name="saveAddress"
-                                id="saveAddress">
-                            <label class="form-check-label checkout-label" for="saveAddress">Save this information for
-                                next time</label>
-                        </div>
-
-                        <hr class="my-lg-5 my-4">
-
-                        <h3 class="mb-3">Payment</h3>
-
-                        <div class="d-block my-3">
-                            <div class="form-check custome-radio-box">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="stripe"
-                                    checked>
-                                <label class="form-check-label" for="stripe">Credit/Debit Card (Stripe)</label>
+                        <!-- Payment method selection -->
+                        <div class="mb-4">
+                            <h5>Payment Method</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payment_method" id="stripe"
+                                    value="stripe" checked>
+                                <label class="form-check-label" for="stripe">
+                                    Credit/Debit Card
+                                </label>
                             </div>
-                            <div class="form-check custome-radio-box">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="cod">
-                                <label class="form-check-label" for="cod">COD</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payment_method" id="cod"
+                                    value="cod">
+                                <label class="form-check-label" for="cod">
+                                    Cash on Delivery
+                                </label>
                             </div>
                         </div>
 
-                        <div id="card-element-container" class="my-3">
-                            <!-- Stripe Elements will be inserted here -->
+                        <!-- Stripe Card Element -->
+                        <div id="card-element-container" class="mb-4">
+                            <label for="card-element" class="form-label">Card Details</label>
                             <div id="card-element" class="form-control"></div>
-                            <div id="card-errors" class="text-danger mt-2" role="alert"></div>
+                            <div id="card-errors" role="alert" class="text-danger mt-2"></div>
                         </div>
 
-                        <div class="card-body">
-                        <form action="{{ route('checkout.stripe') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn btn-primary btn-block">Pay with Stripe</button>
-                        </form>
-                    </div>
+                        <div class="col-md-12 mt-4">
+                            <button id="submit-button" type="submit" class="btn btn-solid-default">
+                                <span id="spinner" class="spinner-border spinner-border-sm d-none"
+                                    role="status"></span>
+                                <span id="button-text">Pay Now</span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
                 <div class="col-lg-4">
@@ -156,10 +138,12 @@
                                 @foreach ($cartItems as $item)
                                     <li class="list-group-item d-flex justify-content-between lh-condensed">
                                         <div>
-                                            <h6 class="my-0">{{ $item->name }}</h6>
-                                            <small class="text-muted" name="quantity">Quantity:{{ $item->qty }}</small>
+                                            <h6 class="my-0">{{ $item->product->name }}</h6>
+                                            <small class="text-muted">Quantity: {{ $item->quantity }}</small>
                                         </div>
-                                        <span class="text-muted">{{ $item->price * $item->qty }}JOD</span>
+                                        <span
+                                            class="text-muted">{{ number_format($item->product->regular_price * $item->quantity, 2) }}
+                                            JOD</span>
                                     </li>
                                 @endforeach
                             @else
@@ -167,25 +151,38 @@
                                     <div>
                                         <h6 class="my-0">No items in cart</h6>
                                     </div>
-                                    <span class="text-muted">$0.00</span>
+                                    <span class="text-muted">0.00 JOD</span>
                                 </li>
                             @endif
 
-                            <li class="list-group-item d-flex justify-content-between lh-condensed active">
-                                <div class="text-dark">
-                                    <h6 class="my-0">Tax</h6>
-                                    <small></small>
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div>
+                                    <h6 class="my-0">Subtotal</h6>
                                 </div>
-                                <span> {{ Cart::instance('cart')->tax() }}JOD </span>
+
+                                <span class="text-muted">{{ number_format($cartTotal, 2) }} JOD</span>
                             </li>
-                            <li class="list-group-item d-flex lh-condensed justify-content-between">
+                            @php
+                                $taxRate = 0.16; // 16% tax
+                                $tax = $cartTotal * $taxRate;
+                                $total = $cartTotal + $tax;
+                            @endphp
+
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div>
+                                    <h6 class="my-0">Tax (16%)</h6>
+                                </div>
+                                <span class="text-muted">{{ number_format($tax ?? 0, 2) }} JOD</span>
+                            </li>
+
+                            <li class="list-group-item d-flex lh-condensed justify-content-between bg-light">
                                 <span class="fw-bold">Total (JOD)</span>
-                                <strong>{{ Cart::instance('cart')->total() }}JOD</strong>
+                                <strong>{{ number_format($total ?? 0, 2) }} JOD</strong>
                             </li>
                         </ul>
 
                         <form class="card border-0">
-                            <div class="input-group custome-imput-group">
+                            <div class="input-group custome-input-group">
                                 <input type="text" class="form-control" placeholder="Promo code">
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-solid-default rounded-0">Redeem</button>
@@ -197,7 +194,6 @@
             </div>
         </div>
     </section>
-
 @endsection
 
 @section('scripts')
@@ -288,59 +284,67 @@
                     return;
                 }
 
-                // Create PaymentIntent on the server
-                const response = await fetch('{{ route('checkout.create-payment-intent') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        name: document.getElementById('name').value,
-                        phone: document.getElementById('phone').value,
-                        address: document.getElementById('address').value,
-                        city: document.getElementById('city').value,
-                        state: document.getElementById('state').value,
-                        zip: document.getElementById('zip').value,
-                        sameAsBilling: document.getElementById('sameAsBilling').checked,
-                        // Include other form fields as needed
-                    })
-                });
-
-                const data = await response.json();
-
-                if (data.error) {
-                    showError(data.error);
-                    return;
-                }
-
-                const clientSecret = data.clientSecret;
-
-                // Confirm the payment with the card Element
-                const result = await stripe.confirmCardPayment(clientSecret, {
-                    payment_method: {
-                        card: cardElement,
-                        billing_details: {
+                try {
+                    // Create PaymentIntent on the server
+                    const response = await fetch('{{ route('checkout.create-payment-intent') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
                             name: document.getElementById('name').value,
+                            email: document.getElementById('email').value,
                             phone: document.getElementById('phone').value,
-                            address: {
-                                line1: document.getElementById('address').value,
-                                city: document.getElementById('city').value,
-                                state: document.getElementById('state').value,
-                                postal_code: document.getElementById('zip').value,
-                                country: document.getElementById('country').value
+                            address: document.getElementById('address').value,
+                            city: document.getElementById('city').value,
+                            state: document.getElementById('state').value,
+                            zip: document.getElementById('zip').value,
+                            country: document.getElementById('country').value,
+                            sameAsBilling: document.getElementById('sameAsBilling')
+                                .checked,
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.error) {
+                        showError(data.error);
+                        return;
+                    }
+
+                    const clientSecret = data.clientSecret;
+
+                    // Confirm the payment with the card Element
+                    const result = await stripe.confirmCardPayment(clientSecret, {
+                        payment_method: {
+                            card: cardElement,
+                            billing_details: {
+                                name: document.getElementById('name').value,
+                                email: document.getElementById('email').value,
+                                phone: document.getElementById('phone').value,
+                                address: {
+                                    line1: document.getElementById('address').value,
+                                    city: document.getElementById('city').value,
+                                    state: document.getElementById('state').value,
+                                    postal_code: document.getElementById('zip').value,
+                                    country: document.getElementById('country').value
+                                }
                             }
                         }
-                    }
-                });
+                    });
 
-                if (result.error) {
-                    // Show error to your customer
-                    showError(result.error.message);
-                } else {
-                    // The payment succeeded!
-                    window.location.href = '{{ route('checkout.success') }}?payment_intent=' + result
-                        .paymentIntent.id;
+                    if (result.error) {
+                        // Show error to your customer
+                        showError(result.error.message);
+                    } else {
+                        // The payment succeeded!
+                        window.location.href = '{{ route('checkout.success') }}?payment_intent=' +
+                            result.paymentIntent.id;
+                    }
+                } catch (error) {
+                    showError("An error occurred. Please try again.");
+                    console.error(error);
                 }
             });
 
@@ -350,28 +354,6 @@
                 spinner.classList.add('hidden');
                 buttonText.textContent = 'Pay Now';
             }
-
-            // Add some basic styles
-            const style = document.createElement('style');
-            style.innerHTML = `
-            .hidden {
-                display: none;
-            }
-            .spinner {
-                display: inline-block;
-                width: 20px;
-                height: 20px;
-                border: 3px solid rgba(255, 255, 255, 0.3);
-                border-radius: 50%;
-                border-top-color: #fff;
-                animation: spin 1s ease-in-out infinite;
-                margin-right: 10px;
-            }
-            @keyframes spin {
-                to { transform: rotate(360deg); }
-            }
-        `;
-            document.head.appendChild(style);
         });
     </script>
 @endsection
