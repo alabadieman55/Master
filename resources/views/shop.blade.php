@@ -141,6 +141,9 @@
                                             <input type="text" class="js-range-slider" id="js-range-price"
                                                 value="">
                                         </div>
+                                        <div class="d-flex justify-content-between mt-2">
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -206,24 +209,22 @@
                                 <div id="collapseSeven" class="accordion-collapse collapse show"
                                     aria-labelledby="headingSeven" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
-                                        <ul class="category-list">
-                                            @foreach ($discounts as $discountPercent)
-                                                <li>
-                                                    <div class="form-check ps-0 custome-form-check">
-                                                        <input class="checkbox_animated check-it" type="checkbox"
-                                                            id="discount-{{ $discountPercent }}"
-                                                            onchange="filterByDiscount(this, {{ $discountPercent }})">
-                                                        <label class="form-check-label"
-                                                            for="discount-{{ $discountPercent }}">
-                                                            {{ $discountPercent }}% OFF
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            @endforeach
+                                        @foreach ($discounts as $discountPercent)
+                                            <li>
+                                                <div class="form-check ps-0 custome-form-check">
+                                                    <input class="checkbox_animated check-it" type="checkbox"
+                                                        id="discount-{{ $discountPercent }}"
+                                                        {{ in_array($discountPercent, explode(',', request('discount', ''))) ? 'checked' : '' }}
+                                                        onchange="filterByDiscount(this, {{ $discountPercent }})">
+                                                    <label class="form-check-label" for="discount-{{ $discountPercent }}">
+                                                        {{ $discountPercent }}% OFF
+                                                    </label>
+                                                </div>
+                                            </li>
+                                        @endforeach
 
 
 
-                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -247,20 +248,19 @@
                                 <div class="select-options">
                                     <div class="page-view-filter">
                                         <div class="dropdown select-featured">
-                                            <select class="form-select" name="orderby" id="orderby">
+                                            <select class="form-select" name="order" id="orderby">
+                                                <!-- Changed name to "order" -->
                                                 <option value="-1" {{ $order == -1 ? 'selected' : '' }}>Sort BY
                                                 </option>
-                                                <option value="1" {{ $order == 1 ? 'selected' : '' }}>Date, New To Old
+                                                <option value="1" {{ $order == 1 ? 'selected' : '' }}>Date, New To
+                                                    Old
                                                 </option>
                                                 <option value="2" {{ $order == 2 ? 'selected' : '' }}>Date, Old To
-                                                    New
-                                                </option>
+                                                    New</option>
                                                 <option value="3" {{ $order == 3 ? 'selected' : '' }}>Price, Low To
-                                                    High
-                                                </option>
+                                                    High</option>
                                                 <option value="4" {{ $order == 4 ? 'selected' : '' }}>Price, High To
-                                                    Low
-                                                </option>
+                                                    Low</option>
                                             </select>
                                         </div>
                                     </div>
@@ -342,7 +342,8 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="javascript:void(0)">
+                                                    <a
+                                                        href={{ route('shop.product.details', ['slug' => $product->slug]) }}>
                                                         <i data-feather="eye"></i>
                                                     </a>
                                                 </li>
@@ -358,23 +359,12 @@
                                     <div class="product-details">
                                         <div class="rating-details">
                                             <span class="font-light grid-content">{{ $product->category->name }}</span>
-                                            <ul class="rating mt-0">
-                                                <li>
-                                                    <i class="fas fa-star theme-color"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star theme-color"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star"></i>
-                                                </li>
-                                            </ul>
+                                            <div class="product">
+                                                <!-- other product details -->
+                                                <div class="rating">
+                                                    <x-star-rating :rating="$product->averageRating()" />
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="main-price">
                                             <a href="{{ route('shop.product.details', ['slug' => $product->slug]) }}"
@@ -441,42 +431,37 @@
 @push('scripts')
     <script>
         // Pass PHP variables to JavaScript
-        var fromValue = {{ $from }};
-        var toValue = {{ $to }};
+        // var fromValue = {{ $from }};
+        // var toValue = {{ $to }};
 
 
-        $(function() {
-            // Initialize the price range slider
-            $(".js-range-slider").ionRangeSlider({
-                type: "double",
-                min: 0,
-                max: 500,
-                from: fromValue,
-                to: toValue,
-                grid: true,
-                prefix: "$",
-                onFinish: function(data) {
-                    $("#prange").val(data.from + "," + data.to);
-                    $("#frmFilter").submit();
-                }
+        $(document).ready(function() {
+            var $range = $("#js-range-price");
+            instance = $range.data("ionRangeSlider");
+            instance.update({
+                from: {{ $from }},
+                to: {{ $to }}
             });
 
-            // Page size change
+            $($range).on("change", function() {
+                setTimeout(() => {
+                    $("#frmFilter").submit();
+
+                }, 1000);
+            });
+
+            // Page size change handler
             $("#pagesize").on("change", function() {
                 $("#size").val($(this).val());
+                $("#page").val(1); // Reset to first page
                 $("#frmFilter").submit();
             });
 
-            // Order by change
+            // Order by change handler
             $("#orderby").on("change", function() {
                 $("#order").val($(this).val());
+                $("#page").val(1); // Reset to first page
                 $("#frmFilter").submit();
-            });
-
-            // Discount filter
-            $("input[id^='discount-']").on("change", function() {
-                // Implement discount filtering logic here
-                // You'll need to add a 'discount' parameter to your form
             });
         });
 
@@ -488,6 +473,22 @@
             $("#categories").val(categories.join(','));
             $("#frmFilter").submit();
         }
+
+
+        function filterByDiscount(checkbox, discountPercent) {
+            var checkedDiscounts = [];
+            $("input[id^='discount-']:checked").each(function() {
+                checkedDiscounts.push($(this).attr('id').replace('discount-', ''));
+            });
+
+            var discountValue = checkedDiscounts.join(','); // Combine selected values
+            $("#discount").val(discountValue); // Set the hidden input value
+            console.log("Discounts selected: ", discountValue); // Debugging: Verify the value
+            $("#frmFilter").submit(); // Submit the form
+        }
+
+
+
 
         function getCartWishlistCount() {
             $.ajax({
@@ -507,14 +508,8 @@
             });
         }
 
-        function filterByDiscount(checkbox, discountPercent) {
-            var checkedDiscounts = [];
-            $("input[id^='discount-']:checked").each(function() {
-                checkedDiscounts.push($(this).attr('id').replace('discount-', ''));
-            });
-            $("#discount").val(checkedDiscounts.join(','));
-            $("#frmFilter").submit();
-        }
+
+
 
         $(document).ready(function() {
             feather.replace(); // Initialize feather icons

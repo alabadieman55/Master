@@ -10,116 +10,140 @@ use Cart;
 
 class ShopController extends Controller
 {
-   public function index(Request $request)
-   {
-      $page = $request->query("page");
-      $size = $request->query("size");
-      if (!$page)
-         $page = 1;
-      if (!$size)
-         $size = 12;
-      $order = $request->query("order");
-      if (!$order)
-         $order = -1;
-      $o_column = "";
-      $o_order = "";
-      switch ($order) {
-         case 1:
-            $o_column = "created_at";
-            $o_order = "DESC";
-            break;
-         case 2:
-            $o_column = "created_at";
-            $o_order = "ASC";
-            break;
-         case 3:
-            $o_column = "regular_price";
-            $o_order = "ASC";
-            break;
-         case 4:
-            $o_column = "regular_price";
-            $o_order = "DESC";
-            break;
-         default:
-            $o_column = "id";
-            $o_order = "DESC";
-      }
-      $q_discounts = $request->query("discount");
+    public function index(Request $request)
+    {
+        // Pagination parameters
+        $page = $request->query("page", 1);
+        $size = $request->query("size", 12);
 
-      $Catogories = Category::orderBy("name", "ASC")->get();
-      $q_categories = $request->query("categories");
-      $prange = $request->query("prange");
-      if (!$prange)
-         $prange = "0,500";
+        // Sorting parameters
+        $order = $request->query("order", -1);
+        $o_column = "id";
+        $o_order = "DESC";
+        switch ($order) {
+            case 1:
+                $o_column = "created_at";
+                $o_order = "DESC";
+                break;
+            case 2:
+                $o_column = "created_at";
+                $o_order = "ASC";
+                break;
+            case 3:
+                $o_column = "regular_price";
+                $o_order = "ASC";
+                break;
+            case 4:
+                $o_column = "regular_price";
+                $o_order = "DESC";
+                break;
+        }
 
-      $from = explode(",", $prange)[0];
-      $to = explode(",", $prange)[1];
+        // Price range filtering - FIXED SECTION
+        $prange = $request->query("prange");
+        if (!$prange) {
+            $prange = "0,500";
+        }
 
+        $priceParts = explode(",", $prange);
+        $from = max(0, (float)($priceParts[0] ?? 0));  // Ensure minimum 0
+        $to = min(500, (float)($priceParts[1] ?? 500)); // Ensure maximum 500
 
-      $products = Product::where(function ($query) use ($q_categories) {
-         $query->whereIn('category_id', explode(',', $q_categories))
-            ->orWhereRaw("'" . $q_categories . "' = ''");
-      })
-         ->whereBetween('regular_price', array($from, $to))
-         ->when($q_discounts, function ($query) use ($q_discounts) {
-            $query->where(function ($q) use ($q_discounts) {
-               foreach (explode(',', $q_discounts) as $discount) {
-                  $q->orWhereRaw('(discount / regular_price) * 100 >= ?', [$discount - 1])
-                     ->whereRaw('(discount / regular_price) * 100 <= ?', [$discount + 1]);
-               }
-            });
-         })
-         ->orderBy('created_at', 'DESC')
-         ->orderBy($o_column, $o_order)
-         ->paginate($size);
+        // Swap values if from > to
+        if ($from > $to) {
+            [$from, $to] = [$to, $from];
+        }
 
-      $discounts = Product::where('discount', '>', 0)
-         ->get()
-         ->map(function ($product) {
-            return round(($product->discount / $product->regular_price) * 100);
-         })
-         ->unique()
-         ->sort()
-         ->values();
+        // Category filtering - SIMPLIFIED
+        $q_categories = $request->query("categories", "");
+        $categoryIds = $q_categories ? explode(',', $q_categories) : [];
 
-      // dd($discounts);
+        // Discount filtering
+        $q_discounts = $request->query('discount');
+
+        if ($q_discounts) {
+            $discountValues = array_filter(
+                explode(',', $q_discounts),
+                function ($value) {
+                    return is_numeric($value) && (float)$value >= 0;
+                }
+            );
+        } else {
+            $discountValues = [];
+        }
 
 
+        // Build query
+        $products = Product::query()
+            ->when(!empty($categoryIds), function ($query) use ($categoryIds) {
+                $query->whereIn('category_id', $categoryIds);
+            })
+            ->whereBetween('regular_price', [$from, $to])
+            ->when(!empty($discountValues), function ($query) use ($discountValues) {
+                $query->where(function ($q) use ($discountValues) {
+                    foreach ($discountValues as $discount) {
+                        $discount = (float)$discount; // Parse as float
+                        $q->orWhere(function ($subQuery) use ($discount) {
+                            $subQuery->whereRaw('(discount / regular_price) * 100 >= ?', [$discount - 1])
+                                ->whereRaw('(discount / regular_price) * 100 <= ?', [$discount + 1]);
+                        });
+                    }
+                });
+            })
 
-      // In your controller, pass the range values to the view
-      return view('shop', [
-         'products' => $products,
-         'page' => $page,
-         'size' => $size,
-         'order' => $order,
-         'categories' => $Catogories,
-         'q_categories' => $q_categories,
-         'from' => $from,
-         'prange' => $prange,
-         'to' => $to,
-         'discounts' => $discounts,
-         'initial_min' => $from,  // Add these
-         'initial_max' => $to      // Add these
-      ]);
-   }
+
+            ->orderBy($o_column, $o_order)
+            ->paginate($size);
 
 
-   public function productDetails($slug)
-   {
-      $product = Product::where('slug', $slug)->firstOrFail();
-      $rproducts = Product::where('slug', '!=', $slug)->inRandomOrder()->take(8)->get();
-      return view('details', ['product' => $product, 'rproducts' => $rproducts]);
-   }
+        // Get categories for filter display
+        $Catogories = Category::orderBy("name", "ASC")->get();
 
-   public function getCartAndWishlistCount()
-   {
-      $cartCount = Cart::instance('default')->count(); // هذا لو عندك cart عادي
-      $wishlistCount = Cart::instance('wishlist')->count(); // هذا هو المطلوب
+        // Get unique discounts for filter display
+        $discounts = Product::where('discount', '>', 0)
+            ->get()
+            ->map(function ($product) {
+                return round(($product->discount / $product->regular_price) * 100);
+            })
+            ->unique()
+            ->sort()
+            ->values();
 
-      return response()->json([
-         'status' => 200,
-         'cartCount' => $cartCount,
-         'wishlistCount' => $wishlistCount,
-      ]);
-   }
+
+        return view('shop', [
+            'products' => $products,
+            'page' => $page,
+            'size' => $size,
+            'order' => $order,
+            'categories' => $Catogories,
+            'q_categories' => $q_categories,
+            'q_discounts' => $q_discounts,
+            'from' => $from,
+            'prange' => $prange,
+            'to' => $to,
+            'discounts' => $discounts,
+            'initial_min' => $from,
+            'initial_max' => $to
+        ]);
+    }
+
+
+    public function productDetails($slug)
+    {
+        $product = Product::where('slug', $slug)->firstOrFail();
+        $rproducts = Product::where('slug', '!=', $slug)->inRandomOrder()->take(8)->get();
+        return view('details', ['product' => $product, 'rproducts' => $rproducts]);
+    }
+
+    public function getCartAndWishlistCount()
+    {
+        $cartCount = Cart::instance('default')->count(); // هذا لو عندك cart عادي
+        $wishlistCount = Cart::instance('wishlist')->count(); // هذا هو المطلوب
+
+        return response()->json([
+            'status' => 200,
+            'cartCount' => $cartCount,
+            'wishlistCount' => $wishlistCount,
+        ]);
+    }
 }

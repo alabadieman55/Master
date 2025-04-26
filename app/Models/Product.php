@@ -45,4 +45,19 @@ class Product extends Model
         return $this->belongsToMany(User::class, 'wishlists')
             ->withTimestamps();
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function averageRating()
+    {
+        return $this->ratings()->avg('rating');
+    }
+
+    public function totalRatings()
+    {
+        return $this->ratings()->count();
+    }
 }

@@ -1,6 +1,43 @@
 @extends('layouts.base')
 @push('styles')
     <link id="color-link" rel="stylesheet" type="text/css" href="{{ asset('assets/css/demo2.css') }}">
+    <style>
+        .rating-input {
+            display: inline-block;
+            font-size: 1.5rem;
+        }
+
+        .rating-input .rating-star {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .rating-input .fa-star {
+            color: #ddd;
+        }
+
+        .rating-input .fa-star.theme-color {
+            color: #ffc107;
+        }
+
+        .rating-input .fa-star.hover {
+            color: #ffc107;
+        }
+
+        .review {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .review:last-child {
+            border-bottom: none;
+        }
+
+        .user-rating .stars i {
+            cursor: pointer;
+        }
+    </style>
 @endpush
 @section('content')
 
@@ -34,7 +71,7 @@
                 </div>
             </div>
         </div>
-    </section> <!-- Shop Section start -->
+    </section>
 
     <section>
         <div class="container">
@@ -49,7 +86,6 @@
                                             <div>
                                                 <img src="{{ asset('storage/products/' . $product->image) }}"
                                                     class="img-fluid blur-up lazyload" alt="{{ $product->name }}">
-
                                             </div>
                                             @if ($product->images)
                                                 @php
@@ -57,32 +93,27 @@
                                                 @endphp
                                                 @foreach ($images as $image)
                                                     <div>
-                                                        <img src="{{ asset('storage/products/' . $product->image) }}"
+                                                        <img src="{{ asset('storage/products/' . $image) }}"
                                                             class="img-fluid blur-up lazyload" alt="{{ $product->name }}">
-
                                                     </div>
                                                 @endforeach
                                             @endif
-
-
                                         </div>
                                     </div>
                                     <div class="col-lg-10">
                                         <div class="details-image-1 ratio_asos">
                                             <div>
-                                                <img src=" {{ asset('storage/products/' . $product->image) }} "
+                                                <img src="{{ asset('storage/products/' . $product->image) }}"
                                                     class="img-fluid w-100 image_zoom_cls-0 blur-up lazyload"
                                                     alt="{{ $product->name }}">
-
                                             </div>
                                             @if ($product->images)
                                                 @php
-                                                    $images = explode(',', $product->image);
+                                                    $images = explode(',', $product->images);
                                                 @endphp
-
                                                 @foreach ($images as $image)
                                                     <div>
-                                                        <img src="{{ asset('storage/products/' . $product->image) }}"
+                                                        <img src="{{ asset('storage/products/' . $image) }}"
                                                             class="img-fluid blur-up lazyload" alt="Product Image">
                                                     </div>
                                                 @endforeach
@@ -129,10 +160,9 @@
                                                 off
                                             </span>
                                         @else
-                                            {{ $product->regular_price }}
+                                            ${{ $product->regular_price }}
                                         @endif
                                     </h3>
-
 
                                     <div class="color-image">
                                         <div class="image-select">
@@ -218,11 +248,7 @@
                                             data-product-id="{{ $product->id }}">
                                             <i class="fa fa-shopping-cart"></i>
                                             <span>Add To Cart</span>
-
                                         </a>
-
-
-
                                     </div>
 
                                     <ul class="product-count shipping-order">
@@ -235,7 +261,6 @@
 
                                     <div class="mt-2 mt-md-3 border-product">
                                         <h6 class="product-title hurry-title d-block">
-
                                             @if ($product->stock_status == 'instock')
                                                 InStock
                                             @else
@@ -308,16 +333,12 @@
                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                 <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
                                     data-bs-target="#desc" type="button">Description</button>
-
                                 <button class="nav-link" id="nav-speci-tab" data-bs-toggle="tab" data-bs-target="#speci"
                                     type="button">Specifications</button>
-
                                 <button class="nav-link" id="nav-size-tab" data-bs-toggle="tab"
                                     data-bs-target="#nav-guide" type="button">Sizing Guide</button>
-
                                 <button class="nav-link" id="nav-question-tab" data-bs-toggle="tab"
                                     data-bs-target="#question" type="button">Q & A</button>
-
                                 <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
                                     data-bs-target="#review" type="button">Review</button>
                             </div>
@@ -327,7 +348,6 @@
                             <div class="tab-pane fade show active" id="desc">
                                 <div class="shipping-chart">
                                     {{ $product->description }}
-
                                 </div>
                             </div>
 
@@ -405,7 +425,6 @@
                                                 <td>10.5</td>
                                                 <td>11</td>
                                             </tr>
-
                                             <tr>
                                                 <th>Euro Sizes</th>
                                                 <td>39</td>
@@ -419,7 +438,6 @@
                                                 <td>43</td>
                                                 <td>43-44</td>
                                             </tr>
-
                                             <tr class="bg-color">
                                                 <th>UK Sizes</th>
                                                 <td>5.5</td>
@@ -433,7 +451,6 @@
                                                 <td>10.5</td>
                                                 <td>11</td>
                                             </tr>
-
                                             <tr>
                                                 <th>Inches</th>
                                                 <td>9.25"</td>
@@ -447,7 +464,6 @@
                                                 <td>10.765"</td>
                                                 <td>10.85</td>
                                             </tr>
-
                                             <tr class="bg-color">
                                                 <th>CM</th>
                                                 <td>23.5</td>
@@ -483,7 +499,6 @@
                                                 </div>
                                             </div>
                                         </li>
-
                                         <li>
                                             <div class="que">
                                                 <i class="fas fa-question"></i>
@@ -499,7 +514,6 @@
                                                 </div>
                                             </div>
                                         </li>
-
                                         <li>
                                             <div class="que">
                                                 <i class="fas fa-question"></i>
@@ -521,275 +535,87 @@
                             <div class="tab-pane fade" id="review">
                                 <div class="row g-4">
                                     <div class="col-lg-4">
-                                        <div class="customer-rating">
-                                            <h2>Customer reviews</h2>
-                                            <ul class="rating my-2 d-inline-block">
-                                                <li>
-                                                    <i class="fas fa-star theme-color"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star theme-color"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star theme-color"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star"></i>
-                                                </li>
-                                            </ul>
+                                        <div class="product-ratings">
+                                            <h4>Customer Reviews</h4>
 
-                                            <div class="global-rating">
-                                                <h5 class="font-light">82 Ratings</h5>
+                                            <div class="average-rating">
+                                                <x-star-rating :rating="$product->averageRating()" />
+                                                <span>{{ number_format($product->averageRating(), 1) }} out of 5</span>
+                                                <span>({{ $product->totalRatings() }} ratings)</span>
                                             </div>
 
-                                            <ul class="rating-progess">
-                                                <li>
-                                                    <h5 class="me-3">5 Star</h5>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 78%"
-                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
+                                            @auth
+                                                <div class="user-rating">
+                                                    <p>Your Rating:</p>
+                                                    @php
+                                                        $userRating = $product->ratings
+                                                            ->where('user_id', auth()->id())
+                                                            ->first();
+                                                    @endphp
+                                                    <div class="stars">
+                                                        @for ($i = 1; $i <= 5; $i++)
+                                                            <i class="{{ $userRating && $i <= $userRating->rating ? 'fas' : 'far' }} fa-star theme-color"
+                                                                data-rating="{{ $i }}"
+                                                                data-product-id="{{ $product->id }}"></i>
+                                                        @endfor
                                                     </div>
-                                                    <h5 class="ms-3">78%</h5>
-                                                </li>
-                                                <li>
-                                                    <h5 class="me-3">4 Star</h5>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 62%"
-                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
+                                                </div>
+                                            @endauth
+
+                                            <div class="reviews">
+                                                @foreach ($product->ratings()->with('user')->latest()->get() as $rating)
+                                                    <div class="review">
+                                                        <x-star-rating :rating="$rating->rating" :maxRating="5" />
+                                                        <p>{{ $rating->comment }}</p>
+                                                        <small>By {{ $rating->user->name }} on
+                                                            {{ $rating->created_at->format('M d, Y') }}</small>
                                                     </div>
-                                                    <h5 class="ms-3">62%</h5>
-                                                </li>
-                                                <li>
-                                                    <h5 class="me-3">3 Star</h5>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 44%"
-                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
-                                                    </div>
-                                                    <h5 class="ms-3">44%</h5>
-                                                </li>
-                                                <li>
-                                                    <h5 class="me-3">2 Star</h5>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 30%"
-                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
-                                                    </div>
-                                                    <h5 class="ms-3">30%</h5>
-                                                </li>
-                                                <li>
-                                                    <h5 class="me-3">1 Star</h5>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 18%"
-                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
-                                                    </div>
-                                                    <h5 class="ms-3">18%</h5>
-                                                </li>
-                                            </ul>
+                                                @endforeach
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="col-lg-8">
-                                        <p class="d-inline-block me-2">Rating</p>
-                                        <ul class="rating mb-3 d-inline-block">
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star theme-color"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
-                                            </li>
-                                        </ul>
-                                        <div class="review-box">
-                                            <form class="row g-4">
-                                                <div class="col-12 col-md-6">
-                                                    <label class="mb-1" for="name">Name</label>
-                                                    <input type="text" class="form-control" id="name"
-                                                        placeholder="Enter your name" required="">
-                                                </div>
+                                        @auth
+                                            <div class="review-box">
+                                                <h4>Write a Review</h4>
+                                                <form id="reviewForm" action="{{ route('product.rating.store') }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
 
-                                                <div class="col-12 col-md-6">
-                                                    <label class="mb-1" for="id">Email Address</label>
-                                                    <input type="email" class="form-control" id="id"
-                                                        placeholder="Email Address" required="">
-                                                </div>
+                                                    <div class="mb-3">
+                                                        <p class="d-inline-block me-2">Your Rating:</p>
+                                                        <div class="rating-input">
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                <i class="far fa-star rating-star"
+                                                                    data-value="{{ $i }}"></i>
+                                                            @endfor
+                                                            <input type="hidden" name="rating" id="ratingValue"
+                                                                value="0" required>
+                                                        </div>
+                                                        @error('rating')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
 
-                                                <div class="col-12">
-                                                    <label class="mb-1" for="comments">Comments</label>
-                                                    <textarea class="form-control" placeholder="Leave a comment here" id="comments" style="height: 100px"
-                                                        required=""></textarea>
-                                                </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="comment">Review</label>
+                                                        <textarea class="form-control" name="comment" id="comment" rows="4"
+                                                            placeholder="Share your experience with this product" required></textarea>
+                                                        @error('comment')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
 
-                                                <div class="col-12">
-                                                    <button type="submit"
-                                                        class="btn default-light-theme default-theme default-theme-2">Submit</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 mt-4">
-                                        <div class="customer-review-box">
-                                            <h4>Customer Reviews</h4>
-
-                                            <div class="customer-section">
-                                                <div class="customer-profile">
-                                                    <img src="../assets/images/inner-page/review-image/1.jpg"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-
-                                                <div class="customer-details">
-                                                    <h5>Mike K</h5>
-                                                    <ul class="rating my-2 d-inline-block">
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                    <p class="font-light">I purchased my Tab S2 at Best Buy but I wanted
-                                                        to
-                                                        share my thoughts on Amazon. I'm not going to go over specs and
-                                                        such
-                                                        since you can read those in a hundred other places. Though I
-                                                        will
-                                                        say that the "new" version is preloaded with Marshmallow and now
-                                                        uses a Qualcomm octacore processor in place of the Exynos that
-                                                        shipped with the first gen.</p>
-
-                                                    <p class="date-custo font-light">- Sep 08, 2021</p>
-                                                </div>
+                                                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                                                </form>
                                             </div>
-
-                                            <div class="customer-section">
-                                                <div class="customer-profile">
-                                                    <img src="../assets/images/inner-page/review-image/2.jpg"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-
-                                                <div class="customer-details">
-                                                    <h5>Norwalker</h5>
-                                                    <ul class="rating my-2 d-inline-block">
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                    <p class="font-light">Pros: Nice large(9.7") screen. Bright colors.
-                                                        Easy
-                                                        to setup and get started. Arrived on time. Cons: a bit slow on
-                                                        response, but expected as tablet is 2 generations old. But works
-                                                        fine and good value for the money.</p>
-
-                                                    <p class="date-custo font-light">- Sep 08, 2021</p>
-                                                </div>
+                                        @else
+                                            <div class="alert alert-info">
+                                                <p>Please <a href="{{ route('login') }}">login</a> to submit your review.</p>
                                             </div>
-
-                                            <div class="customer-section">
-                                                <div class="customer-profile">
-                                                    <img src="../assets/images/inner-page/review-image/3.jpg"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-
-                                                <div class="customer-details">
-                                                    <h5>B. Perdue</h5>
-                                                    <ul class="rating my-2 d-inline-block">
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                    <p class="font-light">Love the processor speed and the sensitivity
-                                                        of
-                                                        the touch screen.</p>
-
-                                                    <p class="date-custo font-light">- Sep 08, 2021</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="customer-section">
-                                                <div class="customer-profile">
-                                                    <img src="../assets/images/inner-page/review-image/4.jpg"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-
-                                                <div class="customer-details">
-                                                    <h5>MSL</h5>
-                                                    <ul class="rating my-2 d-inline-block">
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                    <p class="font-light">I purchased the Tablet May 2017 and now April
-                                                        2019
-                                                        I have to charge it everyday. I don't watch movies on it..just
-                                                        play
-                                                        a game or two while on lunch. I guess now I need to power it
-                                                        down
-                                                        for future use.</p>
-
-                                                    <p class="date-custo font-light">- Sep 08, 2021</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @endauth
                                     </div>
                                 </div>
                             </div>
@@ -799,9 +625,7 @@
             </div>
         </div>
     </section>
-    <!-- Shop Section end -->
 
-    <!-- product section start -->
     <section class="ratio_asos section-b-space overflow-hidden">
         <div class="container">
             <div class="row">
@@ -814,7 +638,7 @@
                                     <div class="img-wrapper">
                                         <div class="front">
                                             <a href="{{ route('shop.product.details', ['slug' => $rproduct->slug]) }}">
-                                                <img src="{{ asset('assets/images/fashion/product/front/' . $rproduct->image) }}"
+                                                <img src="{{ asset('storage/products/' . $rproduct->image) }}"
                                                     class="bg-img blur-up lazyload" alt="">
                                             </a>
                                         </div>
@@ -827,14 +651,14 @@
                                         <div class="cart-wrap">
                                             <ul>
                                                 <li>
-                                                    <a href="javascript:void(0)" class="addtocart-btn"
-                                                        data-bs-toggle="modal" data-bs-target="#addtocart">
-                                                        <i data-feather="shopping-bag"></i>
+                                                    <a href="#" class="add-card"
+                                                        data-product-id="{{ $product->id }}">
+                                                        <i data-feather="shopping-cart"></i>
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#quick-view">
+                                                    <a href="{{ route('shop.product.details', ['slug' => $rproduct->slug]) }}"
+                                                        data-bs-toggle="modal" data-bs-target="#quick-view">
                                                         <i data-feather="eye"></i>
                                                     </a>
                                                 </li>
@@ -849,23 +673,9 @@
                                     <div class="product-details">
                                         <div class="rating-details">
                                             <span class="font-light grid-content">{{ $rproduct->category->name }}</span>
-                                            <ul class="rating mt-0">
-                                                <li>
-                                                    <i class="fas fa-star theme-color"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star theme-color"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star"></i>
-                                                </li>
-                                            </ul>
+                                            <a href="#" class="add-card" data-product-id="{{ $product->id }}">
+                                                <i data-feather="shopping-cart"></i>
+                                            </a>
                                         </div>
                                         <div class="main-price">
                                             <a href="{{ route('shop.product.details', ['slug' => $rproduct->slug]) }}"
@@ -896,8 +706,140 @@
             </div>
         </div>
     </section>
-    <!-- product section end -->
-
-
-
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Rating stars interaction for the review form
+            const stars = document.querySelectorAll('.rating-star');
+            const ratingInput = document.getElementById('ratingValue');
+
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const value = parseInt(this.getAttribute('data-value'));
+                    ratingInput.value = value;
+
+                    // Update star display
+                    stars.forEach((s, index) => {
+                        if (index < value) {
+                            s.classList.remove('far');
+                            s.classList.add('fas', 'theme-color');
+                        } else {
+                            s.classList.remove('fas', 'theme-color');
+                            s.classList.add('far');
+                        }
+                    });
+                });
+
+                // Hover effect
+                star.addEventListener('mouseover', function() {
+                    const value = parseInt(this.getAttribute('data-value'));
+                    stars.forEach((s, index) => {
+                        if (index < value) {
+                            s.classList.add('hover');
+                        } else {
+                            s.classList.remove('hover');
+                        }
+                    });
+                });
+
+                star.addEventListener('mouseout', function() {
+                    const currentRating = parseInt(ratingInput.value);
+                    stars.forEach((s, index) => {
+                        s.classList.remove('hover');
+                        if (index < currentRating) {
+                            s.classList.remove('far');
+                            s.classList.add('fas', 'theme-color');
+                        } else {
+                            s.classList.remove('fas', 'theme-color');
+                            s.classList.add('far');
+                        }
+                    });
+                });
+            });
+
+            // For the existing user rating display (if you want to allow rating updates)
+            const userRatingStars = document.querySelectorAll('.user-rating .stars .fa-star');
+            if (userRatingStars.length > 0) {
+                userRatingStars.forEach(star => {
+                    star.addEventListener('click', function() {
+                        const rating = this.getAttribute('data-rating');
+                        const productId = this.getAttribute('data-product-id');
+
+                        fetch('/rate-product', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector(
+                                        'meta[name="csrf-token"]').content
+                                },
+                                body: JSON.stringify({
+                                    product_id: productId,
+                                    rating: rating
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    // Update the displayed stars
+                                    userRatingStars.forEach((s, index) => {
+                                        if (index < rating) {
+                                            s.classList.remove('far');
+                                            s.classList.add('fas', 'theme-color');
+                                        } else {
+                                            s.classList.remove('fas', 'theme-color');
+                                            s.classList.add('far');
+                                        }
+                                    });
+
+                                    // Optionally update the average rating display
+                                    if (data.averageRating) {
+                                        document.querySelector(
+                                                '.average-rating span:first-child')
+                                            .textContent =
+                                            data.averageRating + ' out of 5';
+                                    }
+                                }
+                            });
+                    });
+                });
+            }
+
+            // AJAX form submission for the review form
+            const reviewForm = document.getElementById('reviewForm');
+            if (reviewForm) {
+                reviewForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    fetch(this.action, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                    .content
+                            },
+                            body: JSON.stringify({
+                                product_id: this.product_id.value,
+                                rating: this.rating.value,
+                                comment: this.comment.value
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Refresh the page to show the new review
+                                window.location.reload();
+                            } else {
+                                alert('There was an error submitting your review.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
+            }
+        });
+    </script>
+@endpush

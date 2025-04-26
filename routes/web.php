@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\RatingController;
 
 
 /*
@@ -104,6 +105,10 @@ Route::middleware(['auth', 'auth.admin'])->group(function () {
     Route::put('/orders/{order}', [AdminOrderController::class, 'update'])->name('admin.orders.update');
     Route::delete('/orders/{order}', [AdminOrderController::class, 'destroy'])->name('admin.orders.destroy');
 });
+
+
+//rating
+Route::post('/product/rating', [RatingController::class, 'store'])->name('product.rating.store')->middleware('auth');
 
 
 

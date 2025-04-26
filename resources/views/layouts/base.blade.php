@@ -588,6 +588,7 @@
     <script src="{{ asset('assets/js/script.js') }}"></script>
     <script src="{{ asset('assets/js/wishlist.js') }}"></script>
     <script src="{{ asset('assets/js/addToCart.js') }}"></script>
+    <script src="{{ asset('assets/js/rating.js') }}"></script>
 
 
     <script>
