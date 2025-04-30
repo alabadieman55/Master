@@ -17,7 +17,7 @@ class AdminController extends Controller
         $categories = Category::count();
         $orders = Order::count();
         $users = User::where('Utype', '!=', 'ADM')->count();
-        $revenue = Order::where('status', 'delivered')->sum('total');
+        $revenue = Order::where('payment_status', 'paid')->sum('total');
         $ordersMain = Order::take(5)->orderBy('created_at', 'desc')->get();
         $topSellingProducts = OrderItem::selectRaw('product_id, SUM(quantity) as total_sold')
             ->with('product') // eager load the product relationship

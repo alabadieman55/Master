@@ -68,7 +68,7 @@
                                 </div>
                             </div>
 
-                            <div class="accordion-item category-color">
+                            {{-- <div class="accordion-item category-color">
                                 <h2 class="accordion-header" id="headingThree">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseThree">
@@ -127,7 +127,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="accordion-item category-price">
                                 <h2 class="accordion-header" id="headingFour">
@@ -490,23 +490,7 @@
 
 
 
-        function getCartWishlistCount() {
-            $.ajax({
-                type: 'GET',
-                url: "{{ route('shop.cart.wishlist.count') }}",
-                success: function(data) {
-                    if (data.status == 200) {
-                        $("#cartCount").html(data.cartCount);
-                        $("#wishlist-count").html(data.wishlistCount);
-                    } else {
-                        console.error('Error:', data.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', error);
-                }
-            });
-        }
+
 
 
 

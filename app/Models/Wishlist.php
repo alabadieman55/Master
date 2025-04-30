@@ -9,22 +9,22 @@ class Wishlist extends Model
 {
     use HasFactory;
 
-
-
-
-
-    protected $fillable = ['user_id', 'product_id',];
-
-
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
+    protected $fillable = [
+        'user_id',
+        'session_id',
+        'product_id',
+        'name',
+        'price',
+        'image',
+    ];
 
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

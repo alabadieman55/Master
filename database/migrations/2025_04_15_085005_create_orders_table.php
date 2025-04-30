@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('zip');
             $table->string('type')->default('home');
             $table->enum('status', ['ordered', 'delivered', 'canceled'])->default('ordered');
-            $table->enum('payment_method', ['stripe', 'cod'])->default('cod'); // Added payment method
+            $table->enum('payment_method', ['stripe', 'cod'])->default('stripe'); // Added payment method
             $table->enum('payment_status', ['pending', 'paid', 'failed'])->default('pending'); // Added payment status
             $table->string('transaction_id')->nullable(); // Added for payment gateway reference
             $table->boolean('is_shipping_different')->default(false);

@@ -36,9 +36,9 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->regular_price);
+        // dd($request->all());
 
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required|string|max:255',
             'short_description' => 'required|string|max:255',
             'description' => 'required',
@@ -51,6 +51,7 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
         ]);
 
+        dd($data);
 
         // Handle primary image upload
         $imageName = time() . '.' . $request->image->extension();

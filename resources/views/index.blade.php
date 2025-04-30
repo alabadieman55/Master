@@ -260,16 +260,16 @@
                                 alt="">
                         </a>
                         <!-- <div class="banner-detail">
-                                                                                                                                                        <a href="javacript:void(0)" class="heart-wishlist">
-                                                                                                                                                            <i class="far fa-heart"></i>
-                                                                                                                                                        </a>
-                                                                                                                                                        <span class="font-dark-30">26% <span>OFF</span></span>
-                                                                                                                                                    </div> -->
+                                                                                                                                                                    <a href="javacript:void(0)" class="heart-wishlist">
+                                                                                                                                                                        <i class="far fa-heart"></i>
+                                                                                                                                                                    </a>
+                                                                                                                                                                    <span class="font-dark-30">26% <span>OFF</span></span>
+                                                                                                                                                                </div> -->
                         <a href="shop-left-sidebar.html" class="contain-banner">
                             <!-- <div class="banner-content with-big">
 
-                                                                                                                                                            <span>BUY ONE GET ONE FREE</span>
-                                                                                                                                                        </div> -->
+                                                                                                                                                                        <span>BUY ONE GET ONE FREE</span>
+                                                                                                                                                                    </div> -->
                         </a>
                     </div>
                 </div>
@@ -300,16 +300,16 @@
                                 alt="">
                         </a>
                         <!-- <div class="banner-detail">
-                                                                                                                                                        <a href="javacript:void(0)" class="heart-wishlist">
-                                                                                                                                                            <i class="far fa-heart"></i>
-                                                                                                                                                        </a>
-                                                                                                                                                        <span class="font-dark-30">36% <span>OFF</span></span>
-                                                                                                                                                    </div> -->
+                                                                                                                                                                    <a href="javacript:void(0)" class="heart-wishlist">
+                                                                                                                                                                        <i class="far fa-heart"></i>
+                                                                                                                                                                    </a>
+                                                                                                                                                                    <span class="font-dark-30">36% <span>OFF</span></span>
+                                                                                                                                                                </div> -->
                         <a href="shop-left-sidebar.html" class="contain-banner">
                             <!-- <div class="banner-content with-big">
 
-                                                                                                                                                            <span>New offer 10% off</span>
-                                                                                                                                                        </div> -->
+                                                                                                                                                                        <span>New offer 10% off</span>
+                                                                                                                                                                    </div> -->
                         </a>
                     </div>
                 </div>
@@ -453,7 +453,7 @@
         function addProductToWishlist(id, name, quantity, price) {
             $.ajax({
                 type: 'POST',
-                url: "{{ route('wishlist.store') }}",
+                url: "{{ route('wishlist.add') }}",
                 data: {
                     "_token": "{{ csrf_token() }}", // Include CSRF token
                     id: id,
@@ -472,50 +472,6 @@
                     } else {
                         console.error('Error:', data.message);
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', error);
-                }
-            });
-        }
-
-        function getCartWishlistCount() {
-            $.ajax({
-                type: 'GET',
-                url: "{{ route('shop.cart.wishlist.count') }}",
-                success: function(data) {
-                    if (data.status == 200) {
-                        $("#cartCount").html(data.cartCount); // Update cart count
-                        $("#wishlist-count").html(data.wishlistCount); // Update wishlist count
-                    } else {
-                        console.error('Error:', data.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', error);
-                }
-            });
-        }
-
-        function moveToCart(productId) {
-            // Find the wishlist item rowId for this product
-            let rowId = '';
-            $.ajax({
-                type: 'GET',
-                url: "{{ route('wishlist.list') }}", // Replace with the correct route to fetch wishlist content
-                success: function(data) {
-                    if (Array.isArray(data)) {
-                        data.forEach(item => {
-                            if (item.id == productId) {
-                                rowId = item.rowId;
-                            }
-                        });
-                    } else {
-                        console.error('Expected data to be an array, but received:', data);
-                    }
-                    // Set the rowId in the form and submit
-                    document.getElementById('mrowId-' + productId).value = rowId;
-                    document.getElementById('moveToCartForm-' + productId).submit();
                 },
                 error: function(xhr, status, error) {
                     console.error('AJAX Error:', error);

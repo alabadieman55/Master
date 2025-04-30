@@ -43,7 +43,7 @@
 
             <div class="row g-4">
                 <div class="col-lg-8">
-                    <form action="{{ route('checkout.stripe') }}" id="payment-form" method="POST">
+                    <form action="{{ route('checkout.place-order') }}" id="payment-form" method="POST">
                         @csrf
 
                         <!-- Add billing address fields -->
@@ -117,6 +117,7 @@
                             <div id="card-element" class="form-control"></div>
                             <div id="card-errors" role="alert" class="text-danger mt-2"></div>
                         </div>
+
 
                         <div class="col-md-12 mt-4">
                             <button id="submit-button" type="submit" class="btn btn-solid-default">

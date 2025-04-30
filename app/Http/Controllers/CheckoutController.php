@@ -10,6 +10,7 @@ use Stripe\Stripe;
 use Stripe\PaymentIntent;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Stripe\Checkout\Session as StripeCheckoutSession;
 use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
@@ -33,65 +34,9 @@ class CheckoutController extends Controller
 
         return view('checkout', compact('cartItems', 'subtotal', 'tax', 'total'));
     }
-
-    public function createPaymentIntent(Request $request)
+    public function placeOrder(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'address' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            'zip' => 'required',
-            'country' => 'required',
-        ]);
-
-        try {
-            $sessionId = Session::getId();
-            $cartItems = Cart::where('session_id', $sessionId)->with('product')->get();
-
-            $subtotal = $cartItems->sum(function ($item) {
-                return $item->price * $item->quantity;
-            });
-
-            $taxRate = 0.16;
-            $tax = $subtotal * $taxRate;
-            $total = $subtotal + $tax;
-            $amountInCents = round($total * 100);
-
-            Stripe::setApiKey(config('services.stripe.secret'));
-
-            $paymentIntent = PaymentIntent::create([
-                'amount' => $amountInCents,
-                'currency' => 'jod',
-                'metadata' => [
-                    'customer_name' => $request->name,
-                    'customer_email' => $request->email,
-                    'customer_phone' => $request->phone,
-                    'address' => $request->address,
-                    'city' => $request->city,
-                    'state' => $request->state,
-                    'zip' => $request->zip,
-                    'country' => $request->country,
-                ],
-            ]);
-
-            return response()->json([
-                'clientSecret' => $paymentIntent->client_secret,
-                'total' => $total,
-                'order_data' => $request->all()
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Stripe Payment Intent Error: ' . $e->getMessage());
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function processStripePayment(Request $request)
-    {
-        $request->validate([
-            'payment_intent_id' => 'required',
+        $validated = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
             'phone' => 'required',
@@ -102,6 +47,7 @@ class CheckoutController extends Controller
             'country' => 'required',
             'landmark' => 'nullable|string',
             'type' => 'nullable|string|in:home,office',
+            'payment_method' => 'required|in:stripe,cod'
         ]);
 
         try {
@@ -118,35 +64,166 @@ class CheckoutController extends Controller
             $tax = $subtotal * 0.16;
             $total = $subtotal + $tax;
 
-            Stripe::setApiKey(config('services.stripe.secret'));
-            $paymentIntent = PaymentIntent::retrieve($request->payment_intent_id);
+            // For COD, process immediately
+            if ($validated['payment_method'] === 'cod') {
+                $order = $this->createOrder($validated, $cartItems, 'cod', 'pending');
+                $this->clearCart($sessionId);
 
-            if ($paymentIntent->status !== 'succeeded') {
-                throw new \Exception('Payment not completed');
+                return redirect()->route('checkout.success')
+                    ->with('success', 'Order placed successfully!')
+                    ->with('order_id', $order->id);
             }
 
-            $order = Order::create([
-                'user_id' => Auth::id(),
+            // For Stripe, create checkout session
+            return $this->createStripeCheckoutSession($validated, $cartItems);
+        } catch (\Exception $e) {
+            Log::error('Order Error: ' . $e->getMessage());
+            return redirect()->route('checkout')
+                ->with('error', 'Order failed: ' . $e->getMessage());
+        }
+    }
+
+
+
+    protected function createStripeCheckoutSession($customerData, $cartItems)
+    {
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        $subtotal = $cartItems->sum(function ($item) {
+            return $item->price * $item->quantity;
+        });
+        $tax = $subtotal * 0.16;
+        $total = $subtotal + $tax;
+
+        $lineItems = [];
+        foreach ($cartItems as $item) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => [
+                        'name' => $item->product->name,
+                    ],
+                    'unit_amount' => $item->price * 100, // Convert to cents
+                ],
+                'quantity' => $item->quantity,
+            ];
+        }
+
+        // Add tax as separate line item
+        $lineItems[] = [
+            'price_data' => [
+                'currency' => 'usd',
+                'product_data' => [
+                    'name' => 'Tax',
+                ],
+                'unit_amount' => $tax * 100,
+            ],
+            'quantity' => 1,
+        ];
+
+        // Store order data in session for after payment completion
+        Session::put('pending_order', [
+            'customer_data' => $customerData,
+            'cart_items' => $cartItems,
+            'order_data' => [
                 'subtotal' => $subtotal,
                 'tax' => $tax,
                 'total' => $total,
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'address' => $request->address,
-                'city' => $request->city,
-                'state' => $request->state,
-                'country' => $request->country,
-                'landmark' => $request->landmark,
-                'zip' => $request->zip,
-                'type' => $request->type ?? 'home',
+            ]
+        ]);
+
+        $checkoutSession = StripeCheckoutSession::create([
+            'payment_method_types' => ['card'],
+            'line_items' => $lineItems,
+            'mode' => 'payment',
+            'success_url' => url('/checkout/stripe/success') . '?session_id={CHECKOUT_SESSION_ID}', // Changed to absolute URL
+            'cancel_url' => route('checkout.cancel'),
+            'customer_email' => $customerData['email'],
+            'metadata' => [
+                'customer_name' => $customerData['name'],
+                'customer_phone' => $customerData['phone'],
+            ],
+        ]);
+
+        return redirect($checkoutSession->url);
+    }
+    protected function buildLineItems($cartItems, $tax)
+    {
+        $lineItems = [];
+
+        // Add products
+        foreach ($cartItems as $item) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => ['name' => $item->product->name],
+                    'unit_amount' => $item->price * 100,
+                ],
+                'quantity' => $item->quantity,
+            ];
+        }
+
+        // Add tax
+        $lineItems[] = [
+            'price_data' => [
+                'currency' => 'usd',
+                'product_data' => ['name' => 'Tax'],
+                'unit_amount' => $tax * 100,
+            ],
+            'quantity' => 1,
+        ];
+
+        return $lineItems;
+    }
+
+    public function handleStripeSuccess(Request $request)
+    {
+
+        try {
+            $sessionId = $request->query('session_id');
+            $pendingOrder = Session::get('pending_order');
+
+            if (!$sessionId || !$pendingOrder) {
+                return redirect()->route('checkout.index')
+                    ->with('error', 'Invalid session. Please try again.');
+            }
+
+            // Verify payment with Stripe
+            Stripe::setApiKey(config('services.stripe.secret'));
+            $stripeSession = \Stripe\Checkout\Session::retrieve($sessionId);
+
+            // Double check payment status
+            if ($stripeSession->payment_status !== 'paid') {
+                throw new \Exception('Payment not completed');
+            }
+
+            // Debug: Log pending order data
+            Log::info('Pending Order Data:', $pendingOrder);
+
+            // Create the order
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'subtotal' => $pendingOrder['order_data']['subtotal'],
+                'tax' => $pendingOrder['order_data']['tax'],
+                'total' => $pendingOrder['order_data']['total'],
+                'name' => $pendingOrder['customer_data']['name'],
+                'email' => $pendingOrder['customer_data']['email'],
+                'phone' => $pendingOrder['customer_data']['phone'],
+                'address' => $pendingOrder['customer_data']['address'],
+                'city' => $pendingOrder['customer_data']['city'],
+                'state' => $pendingOrder['customer_data']['state'],
+                'country' => $pendingOrder['customer_data']['country'],
+                'landmark' => $pendingOrder['customer_data']['landmark'] ?? null,
+                'zip' => $pendingOrder['customer_data']['zip'],
+                'type' => $pendingOrder['customer_data']['type'] ?? 'home',
                 'status' => 'ordered',
                 'payment_method' => 'stripe',
                 'payment_status' => 'paid',
-                'transaction_id' => $paymentIntent->id,
+                'transaction_id' => $sessionId,
             ]);
 
-            foreach ($cartItems as $item) {
+            // Create order items
+            foreach ($pendingOrder['cart_items'] as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $item->product_id,
@@ -159,91 +236,73 @@ class CheckoutController extends Controller
                 ]);
             }
 
-            Cart::where('session_id', $sessionId)->delete();
+            // Clear cart and session
+            Cart::where('session_id', Session::getId())->delete();
+            Session::forget('pending_order');
 
             return redirect()->route('checkout.success')
                 ->with('success', 'Payment successful!')
                 ->with('order_id', $order->id);
         } catch (\Exception $e) {
-            Log::error('Stripe Payment Processing Error: ' . $e->getMessage());
+            Log::error('Stripe Success Error: ' . $e->getMessage());
+            Log::error('Stack Trace: ' . $e->getTraceAsString());
             return redirect()->route('checkout.index')
-                ->with('error', 'Payment failed: ' . $e->getMessage());
+                ->with('error', 'Order processing failed: ' . $e->getMessage());
         }
     }
 
-    public function placeOrder(Request $request)
+    protected function createOrder($customerData, $cartItems, $paymentMethod, $paymentStatus, $transactionId = null)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'address' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            'zip' => 'required',
-            'country' => 'required',
-            'landmark' => 'nullable|string',
-            'type' => 'nullable|string|in:home,office',
+        $subtotal = $cartItems->sum(function ($item) {
+            return $item->price * $item->quantity;
+        });
+        $tax = $subtotal * 0.16;
+        $total = $subtotal + $tax;
+
+        $order = Order::create([
+            'user_id' => Auth::id(),
+            'subtotal' => $subtotal,
+            'tax' => $tax,
+            'total' => $total,
+            'name' => $customerData['name'],
+            'email' => $customerData['email'],
+            'phone' => $customerData['phone'],
+            'address' => $customerData['address'],
+            'city' => $customerData['city'],
+            'state' => $customerData['state'],
+            'country' => $customerData['country'],
+            'landmark' => $customerData['landmark'] ?? null,
+            'zip' => $customerData['zip'],
+            'type' => $customerData['type'] ?? 'home',
+            'status' => 'ordered',
+            'payment_method' => $paymentMethod,
+            'payment_status' => $paymentStatus,
+            'transaction_id' => $transactionId,
         ]);
 
-        try {
-            $sessionId = Session::getId();
-            $cartItems = Cart::where('session_id', $sessionId)->with('product')->get();
-
-            if ($cartItems->isEmpty()) {
-                return redirect()->route('cart.index')->with('error', 'Your cart is empty');
-            }
-
-            $subtotal = $cartItems->sum(function ($item) {
-                return $item->price * $item->quantity;
-            });
-            $tax = $subtotal * 0.16;
-            $total = $subtotal + $tax;
-
-            $order = Order::create([
-                'user_id' => Auth::id(),
-                'subtotal' => $subtotal,
-                'tax' => $tax,
-                'total' => $total,
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'address' => $request->address,
-                'city' => $request->city,
-                'state' => $request->state,
-                'country' => $request->country,
-                'landmark' => $request->landmark,
-                'zip' => $request->zip,
-                'type' => $request->type ?? 'home',
-                'status' => 'ordered',
-                'payment_method' => 'cod',
-                'payment_status' => 'pending',
+        foreach ($cartItems as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item->product_id,
+                'price' => $item->price,
+                'quantity' => $item->quantity,
+                'options' => [
+                    'name' => $item->name,
+                    'image' => $item->image
+                ]
             ]);
-
-            foreach ($cartItems as $item) {
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item->product_id,
-                    'price' => $item->price,
-                    'quantity' => $item->quantity,
-                    'options' => [
-                        'name' => $item->name,
-                        'image' => $item->image
-                    ]
-                ]);
-            }
-
-            Cart::where('session_id', $sessionId)->delete();
-
-            return redirect()->route('checkout.success')
-                ->with('success', 'Order placed successfully!')
-                ->with('order_id', $order->id);
-        } catch (\Exception $e) {
-            Log::error('COD Order Error: ' . $e->getMessage());
-            return redirect()->route('checkout')
-                ->with('error', 'Order failed: ' . $e->getMessage());
         }
+
+        return $order;
     }
+
+    protected function clearCart($sessionId)
+    {
+        Cart::where('session_id', $sessionId)->delete();
+    }
+
+
+
 
     public function success(Request $request)
     {

@@ -35,6 +35,12 @@ class Order extends Model
         'notes'
 
     ];
+    protected $dates = [
+        'delivered_date',
+        'canceled_date',
+        'created_at',
+        'updated_at'
+    ];
     public function user()
     {
         return $this->belongsTo(user::class);
@@ -59,7 +65,7 @@ class Order extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class)
-            ->withPivot('quantity', 'unit_price')
+            ->withPivot('quantity', 'price')
             ->withTimestamps();
     }
 }

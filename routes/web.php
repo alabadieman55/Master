@@ -32,7 +32,6 @@ use App\Http\Controllers\RatingController;
 Route::get('/', [AppController::class, 'index'])->name('app.index');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/Product/{slug}', [ShopController::class, 'productDetails'])->name('shop.product.details');
-Route::get('/cart-wishlist-count', [ShopController::class, 'getCartAndWishlistCount'])->name('shop.cart.wishlist.count');
 
 Route::get('/cart', [CartController::class, 'showCart'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
@@ -45,29 +44,31 @@ Route::get('/checkout/cancel', [CartController::class, 'checkoutCancel'])->name(
 // Stripe routes
 Route::post('/checkout/stripe', [StripeController::class, 'createStripeSession'])->name('checkout.stripe');
 Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
-Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.place-order');
 
+Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
 Route::get('/checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
-Route::post('/create-checkout-session/{package}', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
+Route::get('/checkout/stripe/success', [CheckoutController::class, 'handleStripeSuccess'])
+    ->name('checkout.stripe.success');
+Route::post('/create-checkout-session', [StripeController::class, 'createCheckoutSession'])->name('stripe.checkout');
 Route::post('/checkout/create-payment-intent', [StripeController::class, 'createPaymentIntent'])->name('checkout.create-payment-intent');
+// wrong function call
+
+
 
 // // Existing routes
 // Route::get('/stripe/{id}', [StripeController::class, 'stripe'])->name('stripe');
 // Route::post('/stripe/post', [StripeController::class, 'stripePost'])->name('stripe.post');
 
-Route::post('/wishlist/add', [WishlistController::class, 'addToWishlist'])
-    ->name('wishlist.store');
+
 // If you want it to be auth-only
-Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.list');
-Route::get('/wishlist/count', [WishlistController::class, 'count']);
-Route::post('/wishlist/check', [WishlistController::class, 'check']);
 
-Route::delete('/wishlist/{productId}', [WishlistController::class, 'remove'])->name('wishlist.remove');
-Route::delete('/wishlist/clear', [WishlistController::class, 'clearWishlist'])->name('wishlist.clear');
-Route::post('/wishlist/{productId}/move-to-cart', [WishlistController::class, 'moveToCart'])->name('wishlist.moveToCart');
+// Wishlist routes
+Route::post('/wishlist/add', [WishlistController::class, 'addToWishlist'])->name('wishlist.add');
+Route::get('/wishlist', [WishlistController::class, 'showWishlist'])->name('wishlist.index');
+Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist.remove');
+Route::post('/wishlist/move-to-cart/{id}', [WishlistController::class, 'moveToCart'])->name('wishlist.moveToCart');
+Route::get('/wishlist/clear', [WishlistController::class, 'clearWishlist'])->name('wishlist.clear');
 
-
-Route::post('/wishlist/toggle', [WishlistController::class, 'toggle']);
 // Checkout Routes
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
 Route::post('/checkout/stripe', [CartController::class, 'createStripeSession'])->name('checkout.stripe');

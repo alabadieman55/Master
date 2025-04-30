@@ -165,7 +165,7 @@
                                     </h3>
 
                                     <div class="color-image">
-                                        <div class="image-select">
+                                        {{-- <div class="image-select">
                                             <h5>Color :</h5>
                                             <ul class="image-section">
                                                 <li>
@@ -187,10 +187,10 @@
                                                     </a>
                                                 </li>
                                             </ul>
-                                        </div>
+                                        </div> --}}
                                     </div>
 
-                                    <div id="selectSize" class="addeffect-section product-description border-product">
+                                    {{-- <div id="selectSize" class="addeffect-section product-description border-product">
                                         <h6 class="product-title size-text">select size
                                             <a href="javascript:void(0)" data-bs-toggle="modal"
                                                 data-bs-target="#sizemodal">size chart</a>
@@ -235,7 +235,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="product-buttons">
                                         <a href="javascript:void(0)" class="btn btn-solid">
@@ -298,11 +298,11 @@
                                                         <i class="fab fa-facebook-f"></i>
                                                     </a>
                                                 </li>
-                                                <li>
+                                                {{-- <li>
                                                     <a href="https://www.google.com/">
                                                         <i class="fab fa-google-plus-g"></i>
                                                     </a>
-                                                </li>
+                                                </li> --}}
                                                 <li>
                                                     <a href="https://twitter.com/">
                                                         <i class="fab fa-twitter"></i>
@@ -313,11 +313,11 @@
                                                         <i class="fab fa-instagram"></i>
                                                     </a>
                                                 </li>
-                                                <li class="pe-0">
+                                                {{-- <li class="pe-0">
                                                     <a href="https://www.google.com/">
                                                         <i class="fas fa-rss"></i>
                                                     </a>
-                                                </li>
+                                                </li> --}}
                                             </ul>
                                         </div>
                                     </div>
@@ -333,10 +333,10 @@
                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                 <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
                                     data-bs-target="#desc" type="button">Description</button>
-                                <button class="nav-link" id="nav-speci-tab" data-bs-toggle="tab" data-bs-target="#speci"
+                                {{-- <button class="nav-link" id="nav-speci-tab" data-bs-toggle="tab" data-bs-target="#speci"
                                     type="button">Specifications</button>
                                 <button class="nav-link" id="nav-size-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-guide" type="button">Sizing Guide</button>
+                                    data-bs-target="#nav-guide" type="button">Sizing Guide</button> --}}
                                 <button class="nav-link" id="nav-question-tab" data-bs-toggle="tab"
                                     data-bs-target="#question" type="button">Q & A</button>
                                 <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"

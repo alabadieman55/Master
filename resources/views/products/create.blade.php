@@ -243,16 +243,16 @@ input[type="file"].form-control {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .card-header a {
     margin-top: 15px;
   }
-  
+
   .row {
     margin-left: -10px;
     margin-right: -10px;
   }
-  
+
   .col-md-4, .col-md-6, .col-md-8 {
     padding-left: 10px;
     padding-right: 10px;
@@ -285,7 +285,7 @@ input[type="file"].form-control {
                     <div class="row">
                         <div class="col-md-8">
                             <div class="form-group mb-3">
-                                <label for="name" class="form-label">Product Name <span
+                                <label for="name" class="form-label">Product Name<span
                                         class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('name') is-invalid @enderror"
                                     id="name" name="name" value="{{ old('name') }}" required>

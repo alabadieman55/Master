@@ -164,14 +164,15 @@
                                         </div>
                                     </li>
                                     <li class="onhover-dropdown wishlist-dropdown">
-                                        <div class="cart-media">
-                                            <a href="{{ route('wishlist.list') }}">
+                                        <div class="wishlist-media">
+                                            <a href="{{ route('wishlist.index') }}">
                                                 <i data-feather="heart"></i>
-                                                <span id="wishlist-count" class="label label-theme rounded-pill">
-
+                                                <span id="wishlist-count"
+                                                    class="label label-theme rounded-pill wishlist-counter">
+                                                    {{ App\Models\Wishlist::where('session_id', Session::getId())->count() }}
                                                 </span>
                                             </a>
-                                    </li>
+                                        </div>
                                     <li class="onhover-dropdown wishlist-dropdown">
                                         <div class="cart-media">
                                             <a href="{{ route('cart.index') }}">
