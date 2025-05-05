@@ -60,4 +60,8 @@ class Product extends Model
     {
         return $this->ratings()->count();
     }
+    public function getImageUrlAttribute()
+    {
+        return asset('storage/' . $this->image); // or your actual image path logic
+    }
 }

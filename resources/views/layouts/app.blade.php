@@ -20,6 +20,64 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
+<style>
+    .search-results-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #ddd;
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 10000;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .search-result-item {
+        display: flex;
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        color: #333;
+        text-decoration: none;
+        transition: background 0.2s;
+    }
+
+    .search-result-item:hover {
+        background: #f8f9fa;
+    }
+
+    .search-result-image {
+        width: 50px;
+        height: 50px;
+        margin-right: 15px;
+    }
+
+    .search-result-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .search-result-content h6 {
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    .search-result-footer {
+        padding: 10px;
+        text-align: center;
+        background: #f8f9fa;
+    }
+
+    .search-no-results {
+        padding: 15px;
+        color: #666;
+        text-align: center;
+    }
+</style>
 
 <body>
     <div id="app">
@@ -84,6 +142,8 @@
             @yield('content')
         </main>
     </div>
+
+
 </body>
 
 </html>

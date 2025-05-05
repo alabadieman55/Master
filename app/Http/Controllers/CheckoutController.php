@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Stripe\Checkout\Session as StripeCheckoutSession;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
 
 class CheckoutController extends Controller
 {
@@ -22,6 +23,12 @@ class CheckoutController extends Controller
 
         if ($cartItems->isEmpty()) {
             return redirect()->route('cart.index')->with('error', 'Your cart is empty');
+        }
+        foreach ($cartItems as $item) {
+            if ($item->product->stock < $item->quantity) {
+                return redirect()->route('cart.index')
+                    ->with('error', "{$item->product->name} is out of stock!");
+            }
         }
 
         $subtotal = $cartItems->sum(function ($item) {
@@ -184,7 +191,7 @@ class CheckoutController extends Controller
             $pendingOrder = Session::get('pending_order');
 
             if (!$sessionId || !$pendingOrder) {
-                return redirect()->route('checkout.index')
+                return redirect()->route('checkout')
                     ->with('error', 'Invalid session. Please try again.');
             }
 
@@ -201,26 +208,13 @@ class CheckoutController extends Controller
             Log::info('Pending Order Data:', $pendingOrder);
 
             // Create the order
-            $order = Order::create([
-                'user_id' => Auth::id(),
-                'subtotal' => $pendingOrder['order_data']['subtotal'],
-                'tax' => $pendingOrder['order_data']['tax'],
-                'total' => $pendingOrder['order_data']['total'],
-                'name' => $pendingOrder['customer_data']['name'],
-                'email' => $pendingOrder['customer_data']['email'],
-                'phone' => $pendingOrder['customer_data']['phone'],
-                'address' => $pendingOrder['customer_data']['address'],
-                'city' => $pendingOrder['customer_data']['city'],
-                'state' => $pendingOrder['customer_data']['state'],
-                'country' => $pendingOrder['customer_data']['country'],
-                'landmark' => $pendingOrder['customer_data']['landmark'] ?? null,
-                'zip' => $pendingOrder['customer_data']['zip'],
-                'type' => $pendingOrder['customer_data']['type'] ?? 'home',
-                'status' => 'ordered',
-                'payment_method' => 'stripe',
-                'payment_status' => 'paid',
-                'transaction_id' => $sessionId,
-            ]);
+            $order = $this->createOrder(
+                $pendingOrder['customer_data'],
+                $pendingOrder['cart_items'],
+                'stripe',
+                'paid',
+                $sessionId
+            );
 
             // Create order items
             foreach ($pendingOrder['cart_items'] as $item) {
@@ -246,7 +240,7 @@ class CheckoutController extends Controller
         } catch (\Exception $e) {
             Log::error('Stripe Success Error: ' . $e->getMessage());
             Log::error('Stack Trace: ' . $e->getTraceAsString());
-            return redirect()->route('checkout.index')
+            return redirect()->route('checkout')
                 ->with('error', 'Order processing failed: ' . $e->getMessage());
         }
     }
@@ -281,6 +275,15 @@ class CheckoutController extends Controller
         ]);
 
         foreach ($cartItems as $item) {
+            // Decrease product stock
+            $product = Product::find($item->product_id);
+            if ($product) {
+                $product->decrement('quantity', $item->quantity); // Decrease stock
+                // Alternatively, you can manually update:
+                // $product->stock -= $item->quantity;
+                // $product->save();
+            }
+
             OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $item->product_id,

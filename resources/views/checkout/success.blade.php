@@ -18,7 +18,7 @@
 
 
 
-                        <a href="{{ route('home') }}" class="btn btn-primary">
+                        <a href="/shop" class="btn btn-primary">
                             Continue Shopping
                         </a>
                     </div>

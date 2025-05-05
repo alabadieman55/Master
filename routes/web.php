@@ -16,6 +16,8 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\RatingController;
+use Illuminate\Http\Request;
+use App\Http\Controllers\AnalyticsController;
 
 
 /*
@@ -34,7 +36,7 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/Product/{slug}', [ShopController::class, 'productDetails'])->name('shop.product.details');
 
 Route::get('/cart', [CartController::class, 'showCart'])->name('cart.index');
-Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/add', [CartController::class, 'addToCart'])->middleware('auth');
 Route::put('/cart/{id}', [CartController::class, 'updateCart'])->name('cart.update');
 Route::delete('/cart/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::delete('/cart', [CartController::class, 'clearCart'])->name('cart.clear');
@@ -63,7 +65,7 @@ Route::post('/checkout/create-payment-intent', [StripeController::class, 'create
 // If you want it to be auth-only
 
 // Wishlist routes
-Route::post('/wishlist/add', [WishlistController::class, 'addToWishlist'])->name('wishlist.add');
+Route::post('/wishlist/add', [WishlistController::class, 'addToWishlist'])->name('wishlist.add')->middleware('auth');
 Route::get('/wishlist', [WishlistController::class, 'showWishlist'])->name('wishlist.index');
 Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist.remove');
 Route::post('/wishlist/move-to-cart/{id}', [WishlistController::class, 'moveToCart'])->name('wishlist.moveToCart');
@@ -123,3 +125,29 @@ Route::post('/contactus', [ContactusController::class, 'submitForm'])->name('con
 
 Route::get('/admin/contacts/{contact}', [ContactUsController::class, 'show'])
     ->name('admin.contact.show');
+
+//LiveSearch
+Route::get('/search/live', function (Request $request) {
+    $query = $request->input('q');
+
+    $results = \App\Models\Product::where('name', 'like', '%' . $query . '%')
+        ->orWhere('description', 'like', '%' . $query . '%')
+        ->take(8)
+        ->get()
+        ->map(function ($product) {
+            return [
+                'name' => $product->name,
+                'url' => route('shop.product.details', $product->id),
+                'image' => $product->image_url, // Make sure you have this accessor
+                'price' => '$' . number_format($product->price, 2)
+            ];
+        });
+
+    return response()->json($results);
+})->name('search.live');
+
+//analytics
+// routes/web.php (or api.php if you prefer API routes)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/analytics/revenue', [AnalyticsController::class, 'revenueAnalytics']);
+});

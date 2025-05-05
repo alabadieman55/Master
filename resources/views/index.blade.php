@@ -193,12 +193,8 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)"
-                                                onclick="addProductToWishlist({{ $package->id }}, '{{ $package->name }}', 1, {{ $package->regular_price }})"
-                                                class="wishlist">
-
+                                            <a href="#" class="add-wishlist" data-product-id="{{ $package->id }}">
                                                 <i data-feather="heart"></i>
-
                                             </a>
                                         </li>
                                     </ul>
@@ -210,24 +206,11 @@
                                         <div class="theme-color">
                                             {{ number_format($package->regular_price - $package->discount, 2) }}JD
                                         </div>
-                                        <div class="main-price">
-                                            <ul class="rating mb-1 mt-0">
-                                                <li>
-                                                    <i class="fas fa-star theme-color"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star theme-color"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star"></i>
-                                                </li>
-                                            </ul>
+                                        <div class="product">
+                                            <!-- other product details -->
+                                            <div class="rating">
+                                                <x-star-rating :rating="$package->averageRating()" />
+                                            </div>
                                         </div>
                                     </div>
                                     <p class="font-light mb-sm-2 mb-0">{{ $package->short_description }}</p>
@@ -260,16 +243,16 @@
                                 alt="">
                         </a>
                         <!-- <div class="banner-detail">
-                                                                                                                                                                    <a href="javacript:void(0)" class="heart-wishlist">
-                                                                                                                                                                        <i class="far fa-heart"></i>
-                                                                                                                                                                    </a>
-                                                                                                                                                                    <span class="font-dark-30">26% <span>OFF</span></span>
-                                                                                                                                                                </div> -->
+                                                                                                                                                                                            <a href="javacript:void(0)" class="heart-wishlist">
+                                                                                                                                                                                                <i class="far fa-heart"></i>
+                                                                                                                                                                                            </a>
+                                                                                                                                                                                            <span class="font-dark-30">26% <span>OFF</span></span>
+                                                                                                                                                                                        </div> -->
                         <a href="shop-left-sidebar.html" class="contain-banner">
                             <!-- <div class="banner-content with-big">
 
-                                                                                                                                                                        <span>BUY ONE GET ONE FREE</span>
-                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                <span>BUY ONE GET ONE FREE</span>
+                                                                                                                                                                                            </div> -->
                         </a>
                     </div>
                 </div>
@@ -300,16 +283,16 @@
                                 alt="">
                         </a>
                         <!-- <div class="banner-detail">
-                                                                                                                                                                    <a href="javacript:void(0)" class="heart-wishlist">
-                                                                                                                                                                        <i class="far fa-heart"></i>
-                                                                                                                                                                    </a>
-                                                                                                                                                                    <span class="font-dark-30">36% <span>OFF</span></span>
-                                                                                                                                                                </div> -->
+                                                                                                                                                                                            <a href="javacript:void(0)" class="heart-wishlist">
+                                                                                                                                                                                                <i class="far fa-heart"></i>
+                                                                                                                                                                                            </a>
+                                                                                                                                                                                            <span class="font-dark-30">36% <span>OFF</span></span>
+                                                                                                                                                                                        </div> -->
                         <a href="shop-left-sidebar.html" class="contain-banner">
                             <!-- <div class="banner-content with-big">
 
-                                                                                                                                                                        <span>New offer 10% off</span>
-                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                <span>New offer 10% off</span>
+                                                                                                                                                                                            </div> -->
                         </a>
                     </div>
                 </div>
@@ -406,7 +389,8 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="wishlist.php" class="wishlist">
+                                            <a href="#" class="add-wishlist"
+                                                data-product-id="{{ $discount->id }}">
                                                 <i data-feather="heart"></i>
                                             </a>
                                         </li>

@@ -175,7 +175,7 @@
                                                     <h4>Address Book</h4><a href="javascript:void(0)">Manage
                                                         Addresses</a>
                                                 </div> --}}
-                                                {{-- <div class="box-content">
+                                            {{-- <div class="box-content">
                                                     <div class="row g-4">
                                                         <div class="col-sm-6">
                                                             <h6 class="font-light">Default Billing Address</h6>
@@ -191,131 +191,130 @@
                                                         </div>
                                                     </div>
                                                 </div> --}}
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="tab-pane fade table-dashboard dashboard wish-list-section" id="order">
-                            <div class="box-head mb-3">
-                                <h3>My Order</h3>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table cart-table">
-                                    <thead>
-                                        <tr class="table-head">
-                                            <th scope="col">image</th>
-                                            <th scope="col">Order Id</th>
-                                            <th scope="col">Product Details</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Price</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-
-
-                                        @foreach ($ordersData as $order)
-                                            <tr>
-                                                <td>
-                                                    @foreach ($order->items as $item)
-                                                        <a href="details.php">
-                                                            <img src="{{ asset('storage/products/' . $item->product->image) }}"
-                                                                class="blur-up lazyload" alt="">
-                                                        </a>
-                                                    @endforeach
-
-                                                </td>
-                                                <td>
-                                                    <p class="mt-0">#1{{ $order->id }}</p>
-                                                </td>
-
-                                                <td>
-                                                    @foreach ($order->items as $item)
-                                                        <p class="fs-6 m-0">{{ $item->product->name }}</p>
-                                                    @endforeach
-
-                                                </td>
-                                                <td>
-                                                    <p class="success-button btn btn-sm">{{ $order->status }}</p>
-                                                </td>
-                                                <td>
-                                                    <p class="theme-color fs-6">${{ $order->total }}</p>
-                                                </td>
-
-
-                                            </tr>
-                                        @endforeach
-
-
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div class="tab-pane fade table-dashboard dashboard wish-list-section" id="order">
+                        <div class="box-head mb-3">
+                            <h3>My Order</h3>
                         </div>
+                        <div class="table-responsive">
+                            <table class="table cart-table">
+                                <thead>
+                                    <tr class="table-head">
+                                        <th scope="col">image</th>
+                                        <th scope="col">Order Id</th>
+                                        <th scope="col">Product Details</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                        <div class="tab-pane fade table-dashboard dashboard wish-list-section" id="wishlist">
-                            <div class="box-head mb-3">
-                                <h3>My Wishlist</h3>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table cart-table">
-                                    <thead>
 
-                                        <tr class="table-head">
-                                            <th scope="col">image</th>
-                                            <th scope="col">Order Id</th>
-                                            <th scope="col">Product Details</th>
-                                            <th scope="col">Price</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($wishlistsData as $wishlist)
-                                            <tr>
-                                                <td>
+
+                                    @foreach ($ordersData as $order)
+                                        <tr>
+                                            <td>
+                                                @foreach ($order->items as $item)
                                                     <a href="details.php">
-                                                        <img src="{{ asset('storage/products/' . $wishlist->image) }}"
+                                                        <img src="{{ asset('storage/products/' . $item->product->image) }}"
                                                             class="blur-up lazyload" alt="">
                                                     </a>
-                                                </td>
+                                                @endforeach
 
-                                                <td>
-                                                    <p class="m-0">#{{ $wishlist->id }}</p>
-                                                </td>
+                                            </td>
+                                            <td>
+                                                <p class="mt-0">#1{{ $order->id }}</p>
+                                            </td>
 
-                                                <td>
-                                                    <p class="fs-6 m-0">{{ $wishlist->product->name }}</p>
-                                                </td>
-                                                <td>
-                                                    <p class="theme-color fs-6">${{ $wishlist->price }}</p>
-                                                </td>
+                                            <td>
+                                                @foreach ($order->items as $item)
+                                                    <p class="fs-6 m-0">{{ $item->product->name }}</p>
+                                                @endforeach
 
-                                                <td>
-                                                    <a href="#"
-                                                        class="btn btn-solid-default btn-sm fw-bold add-card"
-                                                        data-product-id="{{ $wishlist->product->id }}">
-                                                        Move
-                                                        to
-                                                        Cart</a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                            </td>
+                                            <td>
+                                                <p class="success-button btn btn-sm">{{ $order->status }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="theme-color fs-6">${{ $order->total }}</p>
+                                            </td>
 
 
+                                        </tr>
+                                    @endforeach
 
 
-
-
-
-
-                                    </tbody>
-                                </table>
-                            </div>
+                                </tbody>
+                            </table>
                         </div>
+                    </div>
 
-                        {{-- <div class="tab-pane fade dashboard" id="save">
+                    <div class="tab-pane fade table-dashboard dashboard wish-list-section" id="wishlist">
+                        <div class="box-head mb-3">
+                            <h3>My Wishlist</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table cart-table">
+                                <thead>
+
+                                    <tr class="table-head">
+                                        <th scope="col">image</th>
+                                        <th scope="col">Order Id</th>
+                                        <th scope="col">Product Details</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($wishlistsData as $wishlist)
+                                        <tr>
+                                            <td>
+                                                <a href="details.php">
+                                                    <img src="{{ asset('storage/products/' . $wishlist->image) }}"
+                                                        class="blur-up lazyload" alt="">
+                                                </a>
+                                            </td>
+
+                                            <td>
+                                                <p class="m-0">#{{ $wishlist->id }}</p>
+                                            </td>
+
+                                            <td>
+                                                <p class="fs-6 m-0">{{ $wishlist->product->name }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="theme-color fs-6">${{ $wishlist->price }}</p>
+                                            </td>
+
+                                            <td>
+                                                <a href="#" class="btn btn-solid-default btn-sm fw-bold add-card"
+                                                    data-product-id="{{ $wishlist->product->id }}">
+                                                    Move
+                                                    to
+                                                    Cart</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
+
+
+
+
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {{-- <div class="tab-pane fade dashboard" id="save">
                             <div class="box-head">
                                 <h3>Save Address</h3>
                                 <button class="btn btn-solid-default btn-sm fw-bold ms-auto" data-bs-toggle="modal"
@@ -405,7 +404,7 @@
                             </div>
                         </div> --}}
 
-                        {{-- <div class="tab-pane fade dashboard" id="pay">
+                    {{-- <div class="tab-pane fade dashboard" id="pay">
                             <div class="box-head">
                                 <h3>Card & Payment</h3>
                                 <button class="btn btn-solid-default btn-sm fw-bold ms-auto" data-bs-toggle="modal"
@@ -559,164 +558,63 @@
                             </div>
                         </div> --}}
 
-                        <div class="tab-pane fade dashboard-profile dashboard" id="profile">
-                            <div class="box-head">
-                                <h3>Profile</h3>
-                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#resetEmail">Edit</a>
-                            </div>
-                            <ul class="dash-profile">
-                                <li>
-                                    <div class="left">
-                                        <h6 class="font-light">Company Name</h6>
-                                    </div>
-                                    <div class="right">
-                                        <h6>Surfside Media Fashion</h6>
-                                    </div>
-                                </li>
+                    <div class="tab-pane fade dashboard-profile dashboard" id="profile">
+                        <div class="box-head">
+                            <h3>Profile</h3>
+                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#resetEmail">Edit</a>
+                        </div>
+                        <ul class="dash-profile">
+                            <li>
+                                <div class="left">
+                                    <h6 class="font-light">Company Name</h6>
+                                </div>
+                                <div class="right">
+                                    <h6>Surfside Media Fashion</h6>
+                                </div>
+                            </li>
 
-                                <li>
-                                    <div class="left">
-                                        <h6 class="font-light">Country / Region</h6>
-                                    </div>
-                                    <div class="right">
-                                        <h6>Downers Grove, IL</h6>
-                                    </div>
-                                </li>
+                            <li>
+                                <div class="left">
+                                    <h6 class="font-light">Country / Region</h6>
+                                </div>
+                                <div class="right">
+                                    <h6>Downers Grove, IL</h6>
+                                </div>
+                            </li>
 
-                                <li>
-                                    <div class="left">
-                                        <h6 class="font-light">Year Established</h6>
-                                    </div>
-                                    <div class="right">
-                                        <h6>2018</h6>
-                                    </div>
-                                </li>
+                            <li>
+                                <div class="left">
+                                    <h6 class="font-light">Year Established</h6>
+                                </div>
+                                <div class="right">
+                                    <h6>2018</h6>
+                                </div>
+                            </li>
 
-                                <li>
-                                    <div class="left">
-                                        <h6 class="font-light">Total Employees</h6>
-                                    </div>
-                                    <div class="right">
-                                        <h6>101 - 200 People</h6>
-                                    </div>
-                                </li>
+                            <li>
+                                <div class="left">
+                                    <h6 class="font-light">Total Employees</h6>
+                                </div>
+                                <div class="right">
+                                    <h6>101 - 200 People</h6>
+                                </div>
+                            </li>
 
-                                <li>
-                                    <div class="left">
-                                        <h6 class="font-light">Category</h6>
-                                    </div>
-                                    <div class="right">
-                                        <h6>Clothing</h6>
-                                    </div>
-                                </li>
+                            <li>
+                                <div class="left">
+                                    <h6 class="font-light">Category</h6>
+                                </div>
+                                <div class="right">
+                                    <h6>Clothing</h6>
+                                </div>
+                            </li>
 
-                                <li>
-                                    <div class="left">
-                                        <h6 class="font-light">Street Address</h6>
-                                    </div>
-                                    <div class="right">
-                                        <h6>549 Sulphur Springs Road</h6>
-                                    </div>
-                                </li>
-                            @endsection
-                            <script>
-                                document.addEventListener("DOMContentLoaded", function() {
-                                    // Get all "Add to Cart" buttons
-                                    const addToCartButtons = document.querySelectorAll(".add-card");
-
-                                    // Add click event listeners to all "Add to Cart" buttons
-                                    addToCartButtons.forEach((button) => {
-                                        button.addEventListener("click", function(e) {
-                                            e.preventDefault();
-
-                                            // Get product ID from data attribute
-                                            const productId = this.getAttribute("data-product-id");
-
-                                            // Call the addToCart function
-                                            addToCart(productId, 1); // Assuming quantity of 1
-                                        });
-                                    });
-                                });
-
-                                // Function to send AJAX request to the Laravel controller
-                                function addToCart(productId, quantity) {
-                                    // Get CSRF token from meta tag
-                                    const token = document
-                                        .querySelector('meta[name="csrf-token"]')
-                                        .getAttribute("content");
-
-                                    fetch("/cart/add", {
-                                            method: "POST",
-                                            headers: {
-                                                "Content-Type": "application/json",
-                                                "X-CSRF-TOKEN": token,
-                                                Accept: "application/json",
-                                            },
-                                            body: JSON.stringify({
-                                                product_id: productId,
-                                                quantity: quantity,
-                                            }),
-                                        })
-                                        .then((response) => {
-                                            if (response.status === 401) {
-                                                // User is not logged in
-                                                showNotification("Login to shop!", "warning");
-                                                throw new Error("User not authenticated");
-                                            }
-                                            return response.json();
-                                        })
-                                        .then((data) => {
-                                            if (data.success) {
-                                                // Update the cart counter in the header
-                                                updateCartCounter(data.cartCount);
-
-                                                // Show success notification
-                                                showNotification("Item added to cart!", "success");
-                                            } else {
-                                                showNotification("Failed to add item to cart", "error");
-                                            }
-                                        })
-                                        .catch((error) => {
-                                            console.error("Error:", error);
-                                            if (error.message !== "User not authenticated") {
-                                                showNotification("An error occurred", "error");
-                                            }
-                                        });
-                                }
-
-                                // Function to update the cart counter display
-                                function updateCartCounter(count) {
-                                    const cartCounter = document.querySelector(".cart-counter");
-                                    if (cartCounter) {
-                                        cartCounter.textContent = count;
-                                    }
-                                }
-
-                                function showNotification(message, type) {
-                                    const notification = document.createElement("div");
-                                    notification.className = `notification ${type}`;
-                                    notification.textContent = message;
-                                    document.body.appendChild(notification);
-
-                                    // Add some basic styling
-                                    notification.style.position = "fixed";
-                                    notification.style.top = "20px";
-                                    notification.style.right = "20px";
-                                    notification.style.padding = "10px 20px";
-                                    notification.style.borderRadius = "4px";
-                                    notification.style.zIndex = "1000";
-
-                                    if (type === "success") {
-                                        notification.style.backgroundColor = "#4CAF50";
-                                        notification.style.color = "white";
-                                    } else {
-                                        notification.style.backgroundColor = "#F44336";
-                                        notification.style.color = "white";
-                                    }
-
-                                    // Remove notification after 3 seconds
-                                    setTimeout(() => {
-                                        notification.remove();
-                                    }, 3000);
-                                }
-                            </script>
+                            <li>
+                                <div class="left">
+                                    <h6 class="font-light">Street Address</h6>
+                                </div>
+                                <div class="right">
+                                    <h6>549 Sulphur Springs Road</h6>
+                                </div>
+                            </li>
+                        @endsection

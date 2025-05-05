@@ -30,6 +30,7 @@ function addToCart(productId, quantity) {
             "X-CSRF-TOKEN": token,
             Accept: "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
             product_id: productId,
             quantity: quantity,
@@ -45,6 +46,8 @@ function addToCart(productId, quantity) {
         })
         .then((data) => {
             if (data.success) {
+                console.log("Cart count:", data.cartCount);
+
                 // Update the cart counter in the header
                 updateCartCounter(data.cartCount);
 
@@ -64,9 +67,9 @@ function addToCart(productId, quantity) {
 
 // Function to update the cart counter display
 function updateCartCounter(count) {
-    const cartCounter = document.querySelector(".cart-counter");
+    const cartCounter = document.querySelector("#cart-count"); // Match the ID in your HTML
     if (cartCounter) {
-        cartCounter.textContent = count;
+        cartCounter.textContent = count; // Update the displayed count
     }
 }
 

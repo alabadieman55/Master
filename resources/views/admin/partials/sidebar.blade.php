@@ -22,8 +22,14 @@
                 </a>
             </li>
             <li class="menu-item {{ request()->is('admin/analytics') ? 'active' : '' }}">
-                <i class="fas fa-chart-bar"></i>
-                <span>Analytics</span>
+                <a href="/analytics/revenue"
+                    style="text-decoration: none; color: white; display: flex; align-items: center;">
+
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </a>
+
+
             </li>
         </ul>
 
@@ -57,3 +63,41 @@
         </ul>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // TEST DATA - replace with your actual data later
+        const testData = [{
+                date: "2025-05-01",
+                total: "100.00"
+            },
+            {
+                date: "2025-05-02",
+                total: "150.00"
+            },
+            {
+                date: "2025-05-03",
+                total: "200.00"
+            }
+        ];
+
+        const ctx = document.getElementById('revenueChart');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: testData.map(item => item.date),
+                datasets: [{
+                    label: 'Daily Revenue ($)',
+                    data: testData.map(item => parseFloat(item.total)),
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.1,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    });
+</script>

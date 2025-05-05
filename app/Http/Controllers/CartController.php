@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Stripe\Stripe;
 
 class CartController extends Controller
@@ -19,22 +20,26 @@ class CartController extends Controller
     public function addToCart(Request $request)
     {
         try {
+            Log::info('Request received: ', $request->all());
+
+            // Validate request
             $request->validate([
                 'product_id' => 'required|exists:products,id',
                 'quantity' => 'required|integer|min:1',
             ]);
 
+            Log::info('Validation passed.');
+
+            // Get authenticated user (middleware ensures this exists)
+            $user = Auth::user();
+            Log::info('Authenticated user: ', ['user_id' => $user->id]);
+
             $product = Product::findOrFail($request->product_id);
-            $userId = Auth::check() ? Auth::id() : null;
+            Log::info('Product found: ', ['product_id' => $product->id]);
 
-            // Ensure session is started
-            if (!Session::isStarted()) {
-                Session::start();
-            }
-            $sessionId = Session::getId();
 
-            // Check if product already in cart
-            $cartItem = Cart::where('session_id', $sessionId)
+            // Check if product already in cart for this user
+            $cartItem = Cart::where('user_id', $user->id)
                 ->where('product_id', $product->id)
                 ->first();
 
@@ -45,25 +50,31 @@ class CartController extends Controller
             } else {
                 // Add new to cart
                 $cartItem = Cart::create([
-                    'user_id' => $userId,
-                    'session_id' => $sessionId,
+                    'user_id' => $user->id,
                     'product_id' => $product->id,
                     'name' => $product->name,
-                    'price' => $product->regular_price, // Changed from price to regular_price
+                    'price' => $product->regular_price,
                     'quantity' => $request->quantity,
                     'image' => $product->image,
+                    'session_id' => Session::getId(),
+
                 ]);
             }
 
-            $cartCount = Cart::where('session_id', $sessionId)->sum('quantity');
+            // Get total cart count for user
+            $cartCount = Cart::where('user_id', $user->id)->orWhere('session_id', Session::getId())->sum('quantity');
+            Log::info('Cart updated successfully.', ['cartCount' => $cartCount]);
+
 
             return response()->json([
                 'success' => true,
                 'message' => 'Product added to cart successfully',
                 'cartCount' => $cartCount,
-                'cartItem' => $cartItem
+
             ]);
         } catch (\Exception $e) {
+            Log::error('Error adding to cart: ' . $e->getMessage());
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error adding to cart: ' . $e->getMessage()

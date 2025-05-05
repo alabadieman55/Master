@@ -50,6 +50,34 @@
             .h-logo {
                 max-width: 110px !important;
             }
+
+            .live-search-results {
+                position: absolute;
+                width: 100%;
+                max-height: 400px;
+                overflow-y: auto;
+                background: white;
+                z-index: 1000;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                display: none;
+            }
+
+            .live-search-results .search-item {
+                padding: 10px 15px;
+                border-bottom: 1px solid #eee;
+                cursor: pointer;
+            }
+
+            .live-search-results .search-item:hover {
+                background-color: #f8f9fa;
+            }
+
+            .live-search-results .search-item img {
+                width: 50px;
+                height: 50px;
+                object-fit: cover;
+                margin-right: 10px;
+            }
         }
     </style>
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
@@ -162,6 +190,8 @@
                                         <div class="search-box theme-bg-color">
                                             <i data-feather="search"></i>
                                         </div>
+
+
                                     </li>
                                     <li class="onhover-dropdown wishlist-dropdown">
                                         <div class="wishlist-media">
@@ -182,6 +212,7 @@
                                                 </span>
                                             </a>
                                         </div>
+
                                     </li>
                                     <li class="onhover-dropdown">
                                         <div class="cart-media name-usr">
@@ -233,16 +264,24 @@
                                 </ul>
                             </div>
                             <div class="search-full">
-                                <form method="GET" class="search-full" action="http://localhost:8000/search">
+                                <form method="GET" class="search-full" action="{{ route('search.live') }}">
                                     <div class="input-group">
                                         <span class="input-group-text">
                                             <i data-feather="search" class="font-light"></i>
                                         </span>
-                                        <input type="text" name="q" class="form-control search-type"
-                                            placeholder="Search here..">
+                                        <input type="text" name="q" id="live-search-input"
+                                            class="form-control search-type" placeholder="Search here.."
+                                            autocomplete="off">
                                         <span class="input-group-text close-search">
                                             <i data-feather="x" class="font-light"></i>
                                         </span>
+                                    </div>
+                                    <div id="live-search-results" class="live-search-results">
+                                        <div class="search-loading" style="display: none;">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -590,6 +629,7 @@
     <script src="{{ asset('assets/js/wishlist.js') }}"></script>
     <script src="{{ asset('assets/js/addToCart.js') }}"></script>
     <script src="{{ asset('assets/js/rating.js') }}"></script>
+    <script src="{{ asset('assets/js/search.js') }}"></script>
 
 
     <script>
@@ -614,14 +654,6 @@
                 });
             });
         });
-
-        // Function to update the cart counter display
-        function updateCartCounter(count) {
-            const cartCounter = document.querySelector(".cart-counter");
-            if (cartCounter) {
-                cartCounter.textContent = count;
-            }
-        }
     </script>
     @stack('scripts')
 </body>
